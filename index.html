@@ -1085,6 +1085,10 @@ function addCita(o){
     }
   }
   CITAS.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  // el día de la demo se muestra con historial: dos atendidas, dos confirmadas y el resto pendiente
+  CITAS.filter(c => c.date === iso(TODAY)).forEach((c, i) => {
+    c.estado = i < 2 ? 'atendida' : i < 4 ? 'confirmada' : 'pendiente';
+  });
 })();
 
 /* --- consultas entrantes (12) --- */
