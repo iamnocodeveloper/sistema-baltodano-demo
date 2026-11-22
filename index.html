@@ -1221,6 +1221,18 @@ const SETTINGS = {
 /* ============================================================
    Vistas del panel
    ============================================================ */
+function crNow(){
+  try{
+    const parts = new Intl.DateTimeFormat('en-GB', {timeZone:'America/Costa_Rica', hour:'2-digit', minute:'2-digit', hour12:false}).formatToParts(new Date());
+    const o = {};
+    parts.forEach(x => { o[x.type] = x.value; });
+    return {h: Number(o.hour) % 24, m: Number(o.minute)};
+  }catch(e){
+    const d = new Date();
+    return {h: d.getHours(), m: d.getMinutes()};
+  }
+}
+
 const state = {
   sec: 'escritorio',
   expId: null,
@@ -1382,12 +1394,13 @@ function viewEscritorio(){
   const semana = vencimientosSemana();
   const mes = mesActual();
   const total = totalMes(mes), pagado = pagadoMes(mes), pendiente = pendienteMes(mes);
-  const ahora = new Date().getHours() * 60 + new Date().getMinutes();
+  const _now = crNow();
+  const ahora = _now.h * 60 + _now.m;
   const pendientesHoy = hoy.filter(c => c.estado === 'confirmada' || c.estado === 'pendiente');
   const prox = pendientesHoy.find(c => minutes(c.time) >= ahora) || pendientesHoy[0];
   const expAbiertos = EXPEDIENTS.filter(e => e.estado !== 'cerrado').length;
 
-  const saludo = new Date().getHours() < 12 ? 'Buenos días' : new Date().getHours() < 19 ? 'Buenas tardes' : 'Buenas noches';
+  const saludo = _now.h < 12 ? 'Buenos días' : _now.h < 19 ? 'Buenas tardes' : 'Buenas noches';
   let h = '<div class="page-head"><div><h1>' + saludo + ', licenciado</h1>' +
     '<div class="sub">' + fmtLong(TODAY) + ' · ' + expAbiertos + ' expedientes activos en el bufete</div></div>' +
     '<div class="actions"><button class="btn btn-ghost btn-sm" onclick="go(\'informes\')">' + icon('chart','ico-sm') + 'Ver informes</button>' +
@@ -1578,7 +1591,8 @@ function dayGantt(dateISO, abogados){
       h += '<span class="gl" style="left:' + (((hr * 60 - dStart) / span) * 100) + '%"></span>';
     }
     if(dateISO === iso(TODAY)){
-      const nm = new Date().getHours() * 60 + new Date().getMinutes();
+      const _n = crNow();
+      const nm = _n.h * 60 + _n.m;
       if(nm > dStart && nm < dEnd){
         h += '<span style="position:absolute; top:0; bottom:0; width:2px; background:#A63A44; z-index:3; pointer-events:none; left:' + ((nm - dStart) / span * 100) + '%"></span>';
       }
