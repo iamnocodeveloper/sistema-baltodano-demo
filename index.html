@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+<html lang="es-CR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baltodano Valverde · Sistema de gestión del bufete</title>
+<meta name="description" content="Demo del sistema de gestión del Bufete Baltodano Valverde, San José: agenda por abogado, consultas, expedientes con bitácora, clientes, facturación e informes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12263F;
+  --ink-2:#1B3A5C;
+  --ink-3:#2C4F76;
+  --navy:#0E2138;
+  --navy-2:#14314F;
+  --accent:#B08A3E;
+  --accent-2:#8F6B25;
+  --accent-3:#D6B978;
+  --accent-soft:#F4EBD7;
+  --accent-softer:#FBF7EE;
+  --bg:#F4F6F9;
+  --card:#FFFFFF;
+  --line:#E0E6ED;
+  --line-2:#EDF1F5;
+  --text:#16202E;
+  --muted:#64748B;
+  --muted-2:#93A1B3;
+  --green:#2C7A5B;
+  --green-soft:#E3F2EA;
+  --amber:#8E6712;
+  --amber-soft:#FBF1D9;
+  --red:#A63A44;
+  --red-soft:#FBEAEC;
+  --blue:#2F6493;
+  --blue-soft:#E7EFF7;
+  --radius:13px;
+  --shadow:0 1px 2px rgba(18,38,63,.05), 0 8px 24px rgba(18,38,63,.05);
+  --sidebar-w:258px;
+  --sidebar-c:74px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Instrument Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background:var(--bg); color:var(--text); font-size:14.5px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{margin:0; font-weight:600; letter-spacing:-.015em}
+p{margin:0}
+a{color:inherit; text-decoration:none}
+button{font-family:inherit; cursor:pointer; border:0; background:none; color:inherit; font-size:inherit}
+input,select,textarea{font-family:inherit; font-size:inherit; color:inherit}
+.hidden{display:none !important}
+.ico{width:18px; height:18px; flex:0 0 18px; stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round}
+.ico-sm{width:15px;height:15px;flex:0 0 15px}
+.ico-lg{width:22px;height:22px;flex:0 0 22px}
+.serif{font-family:'Lora', Georgia, serif}
+
+/* ---------- Login ---------- */
+.login{
+  min-height:100vh; display:grid; grid-template-columns:1.06fr .94fr;
+  background:var(--navy);
+}
+.login-art{
+  position:relative; overflow:hidden; padding:48px 54px;
+  background:
+    radial-gradient(110% 85% at 0% 0%, #1E4468 0%, rgba(30,68,104,0) 62%),
+    radial-gradient(70% 60% at 100% 100%, #8F6B25 0%, rgba(143,107,37,0) 58%),
+    linear-gradient(158deg,#0B1B2E 0%, #122A44 55%, #173A5B 100%);
+  color:#EEF3F8; display:flex; flex-direction:column; justify-content:space-between;
+}
+.login-art::after{
+  content:""; position:absolute; inset:-22% -12% auto auto; width:440px; height:440px;
+  border-radius:50%; border:1px solid rgba(255,255,255,.13);
+  box-shadow:0 0 0 62px rgba(255,255,255,.035), 0 0 0 132px rgba(255,255,255,.022);
+}
+.login-art::before{
+  content:""; position:absolute; left:54px; top:0; bottom:0; width:1px; background:linear-gradient(180deg,transparent,rgba(214,185,120,.35),transparent);
+}
+.brand{display:flex; align-items:center; gap:13px; position:relative; z-index:1}
+.brand-mark{
+  width:44px;height:44px;border-radius:11px; display:grid;place-items:center;
+  background:linear-gradient(150deg,#E2C68B,#B08A3E); color:#12263F; font-family:'Lora',Georgia,serif;
+  font-weight:700; font-size:17px; letter-spacing:.02em;
+}
+.brand-name{font-family:'Lora',Georgia,serif; font-size:15.5px; font-weight:600; letter-spacing:.02em; line-height:1.2}
+.brand-sub{font-size:10.5px; opacity:.62; letter-spacing:.05em; text-transform:uppercase; margin-top:2px}
+.login-copy{position:relative; z-index:1; max-width:460px}
+.login-copy .eyebrow{font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#D6B978; font-weight:600}
+.login-copy h1{font-family:'Lora',Georgia,serif; font-weight:500; font-size:36px; line-height:1.18; margin:14px 0 16px; letter-spacing:-.005em}
+.login-copy p{color:#C4D3E1; font-size:14px; line-height:1.68}
+.login-list{list-style:none; margin:26px 0 0; padding:0; display:grid; gap:11px}
+.login-list li{display:flex; gap:10px; align-items:flex-start; font-size:13.5px; color:#DEE8F1}
+.login-list .ico{color:#D6B978; margin-top:1px}
+.login-foot{position:relative; z-index:1; font-size:11.5px; color:#93AAC0}
+.login-panel{display:flex; align-items:center; justify-content:center; background:#F7F9FB; padding:32px 24px}
+.login-card{width:100%; max-width:392px}
+.login-card .mobile-brand{display:none}
+.login-card h2{font-size:24px; font-family:'Lora',Georgia,serif; font-weight:600; margin:0 0 6px}
+.login-card .lead{color:var(--muted); font-size:13.5px; margin-bottom:24px}
+.field{margin-bottom:14px}
+.field label{display:block; font-size:12px; font-weight:600; color:var(--muted); margin-bottom:6px}
+.input, .select, textarea.input{
+  width:100%; padding:11px 13px; border:1px solid var(--line); border-radius:9px;
+  background:#fff; transition:border-color .15s, box-shadow .15s; font-size:14px;
+}
+.input:focus,.select:focus,textarea.input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.input[readonly]{background:#F4F7FA; color:var(--muted)}
+.select{appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:34px}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:10px 16px; border-radius:9px; font-size:13.5px; font-weight:600;
+  border:1px solid transparent; transition:all .15s; white-space:nowrap;
+}
+.btn-primary{background:var(--ink); color:#fff}
+.btn-primary:hover{background:#1C3652}
+.btn-accent{background:var(--accent-2); color:#fff}
+.btn-accent:hover{background:#7A591C}
+.btn-ghost{background:#fff; border-color:var(--line); color:var(--text)}
+.btn-ghost:hover{background:#F7F9FB; border-color:#CDD8E4}
+.btn-soft{background:var(--accent-soft); color:#7A5A18}
+.btn-soft:hover{background:#EFE2C6}
+.btn-block{width:100%; padding:12px}
+.btn-sm{padding:7px 11px; font-size:12.5px; border-radius:8px}
+.btn[disabled]{opacity:.5; cursor:not-allowed}
+.link-btn{color:var(--accent-2); font-weight:600; font-size:13px}
+.link-btn:hover{text-decoration:underline}
+.login-hint{
+  margin-top:18px; padding:12px 14px; border-radius:9px; background:#F5F8FB;
+  border:1px dashed #CFDBE8; font-size:12.5px; color:#3E5875; display:flex; gap:9px; align-items:flex-start;
+}
+.login-note{margin-top:22px; font-size:11.5px; color:var(--muted-2); text-align:center; line-height:1.6}
+
+/* ---------- App shell ---------- */
+.app{display:flex; min-height:100vh}
+.sidebar{
+  width:var(--sidebar-w); flex:0 0 var(--sidebar-w); background:linear-gradient(180deg,#0C1D31 0%, #112A44 62%, #163453 100%);
+  color:#E4EDF5; display:flex; flex-direction:column; position:sticky; top:0; height:100vh; z-index:60;
+  transition:width .2s ease, flex-basis .2s ease, transform .22s ease; overflow:hidden;
+}
+.side-head{padding:20px 18px 16px; display:flex; align-items:center; gap:11px; border-bottom:1px solid rgba(255,255,255,.07); min-height:78px}
+.side-head .brand-mark{width:36px;height:36px;font-size:14px;border-radius:9px; flex:0 0 36px}
+.side-head .brand-name{font-size:12.5px; white-space:nowrap}
+.side-head .brand-sub{font-size:9.5px; color:#8FA9C1}
+.side-close{display:none; margin-left:auto; color:#A9C0D5; padding:4px}
+.side-nav{padding:14px 11px; overflow-y:auto; overflow-x:hidden; flex:1}
+.side-label{font-size:9.5px; text-transform:uppercase; letter-spacing:.16em; color:#7C93AA; padding:10px 11px 6px; font-weight:600; white-space:nowrap}
+.nav-item{
+  display:flex; align-items:center; gap:11px; padding:9.5px 11px; border-radius:8px;
+  color:#C6D7E6; font-size:13.5px; font-weight:500; margin-bottom:2px; width:100%; text-align:left;
+  transition:background .15s,color .15s; white-space:nowrap;
+}
+.nav-item:hover{background:rgba(255,255,255,.06); color:#fff}
+.nav-item.active{background:rgba(214,185,120,.14); color:#fff; font-weight:600; box-shadow:inset 2px 0 0 #D6B978}
+.nav-item.active .ico{color:#E2C68B}
+.nav-item .ico{opacity:.85; flex:0 0 18px}
+.nav-badge{margin-left:auto; background:#D6B978; color:#12263F; font-size:10px; font-weight:700; padding:1px 6px; border-radius:20px}
+.side-foot{padding:14px 16px 18px; border-top:1px solid rgba(255,255,255,.07); font-size:10.5px; color:#8FA6BC; line-height:1.55}
+.side-foot strong{color:#E4EDF5; display:block; font-size:11.5px; font-weight:600; margin-bottom:1px}
+
+/* colapsada */
+.app.collapsed .sidebar{width:var(--sidebar-c); flex-basis:var(--sidebar-c)}
+.app.collapsed .side-head{padding:20px 0 16px; justify-content:center}
+.app.collapsed .side-head .b-txt,
+.app.collapsed .side-label,
+.app.collapsed .nav-item span.nav-t,
+.app.collapsed .nav-badge,
+.app.collapsed .side-foot{display:none}
+.app.collapsed .nav-item{justify-content:center; padding:11px 0}
+.app.collapsed .side-nav{padding:14px 9px}
+
+.main{flex:1; min-width:0; display:flex; flex-direction:column}
+.topbar{
+  position:sticky; top:0; z-index:40; background:rgba(255,255,255,.92); backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line); padding:11px 24px; display:flex; align-items:center; gap:12px; min-height:62px;
+}
+.topbar .hamburger{display:grid; place-items:center; padding:7px; border-radius:7px; border:1px solid var(--line); background:#fff; color:var(--ink)}
+.topbar .collapse-btn{display:grid; place-items:center; padding:7px; border-radius:7px; color:var(--muted)}
+.topbar .collapse-btn:hover{background:#F2F5F8; color:var(--ink)}
+.topbar-title{display:flex; flex-direction:column; min-width:0}
+.topbar-title .t{font-size:15px; font-weight:600}
+.topbar-title .d{font-size:11.5px; color:var(--muted)}
+.topbar-spacer{flex:1}
+.topbar-actions{display:flex; align-items:center; gap:9px}
+.chip-date{
+  display:inline-flex; align-items:center; gap:7px; background:var(--accent-softer); color:#7A5A18;
+  padding:6px 11px; border-radius:20px; font-size:12px; font-weight:500; border:1px solid #EFE2C6;
+}
+.user-btn{display:flex; align-items:center; gap:9px; padding:4px 8px 4px 4px; border-radius:30px; border:1px solid var(--line); background:#fff}
+.user-btn:hover{background:#F7F9FB}
+.avatar{width:30px;height:30px;border-radius:50%; display:grid; place-items:center; font-size:11px; font-weight:700; color:#6B4F13; background:var(--accent-soft); flex:0 0 30px}
+.avatar.lg{width:52px;height:52px;font-size:16px; flex:0 0 52px}
+.avatar.nv{background:#E4EDF5; color:var(--ink-2)}
+.user-btn .un{font-size:12.5px; font-weight:600; line-height:1.2}
+.user-btn .ur{font-size:10.5px; color:var(--muted)}
+.user-menu{
+  position:absolute; right:24px; top:58px; width:252px; background:#fff; border:1px solid var(--line);
+  border-radius:11px; box-shadow:0 14px 40px rgba(18,38,63,.14); padding:6px; z-index:70;
+}
+.user-menu a, .user-menu button{display:flex; align-items:center; gap:10px; width:100%; text-align:left; padding:9px 10px; border-radius:7px; font-size:13px; color:var(--text)}
+.user-menu a:hover, .user-menu button:hover{background:#F4F7FA}
+.user-menu .um-head{padding:10px 10px 9px; border-bottom:1px solid var(--line-2); margin-bottom:5px}
+.user-menu .um-head strong{display:block; font-size:13px}
+.user-menu .um-head span{font-size:11.5px; color:var(--muted)}
+.user-menu hr{border:0; border-top:1px solid var(--line-2); margin:5px 0}
+
+.view{padding:24px; flex:1; max-width:1520px; width:100%}
+.page-head{display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:18px}
+.page-head h1{font-size:22px; font-family:'Lora',Georgia,serif; font-weight:600}
+.page-head .sub{color:var(--muted); font-size:12.5px; margin-top:3px}
+.page-head .actions{margin-left:auto; display:flex; gap:8px; flex-wrap:wrap}
+
+/* ---------- Cards / KPI ---------- */
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); min-width:0}
+.card-pad{padding:17px 19px}
+.card-head{display:flex; align-items:center; gap:10px; padding:15px 19px; border-bottom:1px solid var(--line-2); flex-wrap:wrap}
+.card-head h3{font-size:14px}
+.card-head .hint{font-size:11.5px; color:var(--muted)}
+.card-head .actions{margin-left:auto; display:flex; gap:7px; align-items:center}
+.grid{display:grid; gap:15px}
+.kpis{grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:15px}
+.kpi{padding:16px 17px; position:relative; overflow:hidden}
+.kpi .k-top{display:flex; align-items:center; gap:9px; margin-bottom:8px}
+.kpi .k-ico{width:31px;height:31px;border-radius:8px; display:grid; place-items:center; background:var(--accent-softer); color:var(--accent-2); flex:0 0 31px}
+.kpi .k-lbl{font-size:11.5px; color:var(--muted); font-weight:500}
+.kpi .k-val{font-size:25px; font-weight:700; letter-spacing:-.03em; line-height:1.1; font-variant-numeric:tabular-nums}
+.kpi .k-sub{font-size:11.5px; color:var(--muted); margin-top:4px; display:flex; align-items:center; gap:5px}
+.kpi .k-sub.up{color:var(--green)}
+.kpi.accent{background:linear-gradient(150deg,#15314F,#1E4468); color:#fff; border-color:#1E4468}
+.kpi.accent .k-lbl{color:#B9CCDD}
+.kpi.accent .k-val{color:#fff}
+.kpi.accent .k-sub{color:#C9D8E5}
+.kpi.accent .k-ico{background:rgba(214,185,120,.18); color:#E2C68B}
+.dcols{display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:15px}
+.dcols-3{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; margin-top:15px}
+
+/* ---------- Lists / rows ---------- */
+.row{
+  display:flex; align-items:center; gap:12px; padding:12px 19px; border-top:1px solid var(--line-2);
+  width:100%; text-align:left; transition:background .12s;
+}
+.row:first-child{border-top:0}
+button.row:hover{background:#F8FAFC}
+.row .r-main{min-width:0; flex:1}
+.row .r-t{font-size:13.5px; font-weight:600; display:block}
+.row .r-s{font-size:11.5px; color:var(--muted); display:block; margin-top:1px}
+.row .r-end{margin-left:auto; text-align:right; display:flex; align-items:center; gap:9px}
+.time-box{width:54px; flex:0 0 54px; text-align:center; border-right:1px solid var(--line-2); padding-right:10px}
+.time-box .h{font-size:13.5px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+.time-box .ampm{font-size:9px; color:var(--muted-2); font-weight:600; text-transform:uppercase; white-space:nowrap; letter-spacing:.02em}
+.pill{display:inline-flex; align-items:center; gap:5px; padding:2.5px 9px; border-radius:20px; font-size:11px; font-weight:600; white-space:nowrap}
+.pill::before{content:""; width:5px;height:5px;border-radius:50%; background:currentColor; opacity:.9}
+.pill.no-dot::before{display:none}
+.pill-green{background:var(--green-soft); color:var(--green)}
+.pill-amber{background:var(--amber-soft); color:var(--amber)}
+.pill-red{background:var(--red-soft); color:var(--red)}
+.pill-blue{background:var(--blue-soft); color:var(--blue)}
+.pill-gold{background:var(--accent-soft); color:#7A5A18}
+.pill-gray{background:#EEF2F6; color:#5D6E80}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:6px;background:#F7F9FB;color:#5D6E80;font-size:11px;font-weight:500;border:1px solid var(--line-2);white-space:nowrap}
+
+/* ---------- Agenda bar ---------- */
+.agenda-bar{display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-bottom:13px}
+.seg{display:inline-flex; background:#E6ECF2; padding:3px; border-radius:9px; gap:2px}
+.seg button{padding:6px 13px; border-radius:7px; font-size:12.5px; font-weight:600; color:var(--muted)}
+.seg button.on{background:#fff; color:var(--ink); box-shadow:0 1px 3px rgba(18,38,63,.12)}
+.date-nav{display:inline-flex; align-items:center; gap:3px; background:#fff; border:1px solid var(--line); border-radius:9px; padding:3px}
+.date-nav button{padding:5px 9px; border-radius:6px; color:var(--muted)}
+.date-nav button:hover{background:#F4F7FA; color:var(--text)}
+.date-nav .cur{padding:4px 10px; font-size:12.5px; font-weight:600; min-width:158px; text-align:center}
+.legend{display:flex; gap:14px; flex-wrap:wrap; font-size:11.5px; color:var(--muted); margin-top:11px}
+.legend span{display:inline-flex; align-items:center; gap:6px}
+.dot{width:8px;height:8px;border-radius:50%; display:inline-block}
+
+/* ---------- Agenda: gantt del día ---------- */
+.gantt-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch}
+.gantt{background:#fff; border:1px solid var(--line); border-radius:11px; overflow:hidden; min-width:760px}
+.gantt-head{display:flex; border-bottom:1px solid var(--line); background:#F8FAFC}
+.gantt-lbl-w{width:116px; flex:0 0 116px; border-right:1px solid var(--line-2)}
+.gantt-scale{position:relative; flex:1; height:34px}
+.gantt-scale .hs{position:absolute; top:50%; transform:translate(-50%,-50%); font-size:10px; color:var(--muted); font-weight:600; white-space:nowrap}
+.gantt-lane{display:flex; border-top:1px solid var(--line-2); min-height:78px}
+.gantt-lane:first-of-type{border-top:0}
+.lane-lbl{width:116px; flex:0 0 116px; border-right:1px solid var(--line-2); padding:11px 10px; font-size:12.5px; font-weight:600; background:#FBFCFD}
+.lane-lbl .role{display:block; font-size:10px; color:var(--muted); font-weight:400; margin-top:1px}
+.lane-track{position:relative; flex:1; min-height:78px}
+.lane-grid{position:absolute; inset:0; pointer-events:none}
+.lane-grid .gl{position:absolute; top:0; bottom:0; width:1px; background:var(--line-2)}
+.gbar{position:absolute; top:11px; bottom:11px; border-radius:7px; padding:4px 6px; text-align:left; background:var(--accent-soft); border-left:3px solid var(--accent); overflow:hidden; line-height:1.25; display:flex; flex-direction:column; justify-content:center; transition:filter .12s, box-shadow .12s}
+.gbar:hover{filter:brightness(.98); box-shadow:0 2px 10px rgba(18,38,63,.14); z-index:2}
+.gbar .gt{font-weight:700; font-size:9.5px; color:#7A5A18; letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.gbar .gn{font-weight:600; font-size:11.5px; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.gbar .gs{color:var(--muted); font-size:9.5px; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.gbar.st-pendiente{background:#FCF3DE; border-left-color:#D2A442}
+.gbar.st-pendiente .gt{color:#7E5C10}
+.gbar.st-atendida{background:#EAF3EE; border-left-color:#79A48F}
+.gbar.st-atendida .gt{color:#3E6653}
+.gbar.st-cancelada{background:#F6EAEC; border-left-color:#C08A90; opacity:.85}
+.gbar.st-cancelada .gn{text-decoration:line-through}
+.gbar.tiny{padding:3px 6px}
+.gbar.tiny .gs{display:none}
+.gbar.tiny .gt{font-size:8.5px}
+.ag-lawyer{border-top:1px solid var(--line-2); padding:11px 14px 4px}
+.ag-lawyer:first-child{border-top:0}
+.ag-lawyer-h{display:flex; align-items:center; gap:8px; margin-bottom:4px}
+.ag-lawyer-h .n{font-size:12.5px; font-weight:600}
+.ag-lawyer-h .c{font-size:10.5px; color:var(--muted); margin-left:auto}
+.ag-slot{display:flex; gap:10px; align-items:flex-start; width:100%; text-align:left; padding:7px 0; border-top:1px dashed var(--line-2)}
+.ag-slot:first-of-type{border-top:0}
+.ag-slot .t{flex:0 0 46px; font-size:11.5px; font-weight:700; padding-top:1px}
+.ag-slot .t span{display:block; font-size:9.5px; color:var(--muted); font-weight:500}
+.ag-slot .m{flex:1; min-width:0}
+.ag-slot .m b{display:block; font-size:12.5px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.ag-slot .m i{display:block; font-size:10.5px; color:var(--muted); font-style:normal; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.gantt-empty{padding:16px 18px; color:var(--muted-2); font-size:12px}
+
+/* ---------- Agenda: semana ---------- */
+.only-mobile{display:none}
+@media (max-width:700px){
+  .only-desktop{display:none !important}
+  .only-mobile{display:block}
+}
+.week-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch}
+.week-wrap{display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:7px; min-width:700px}
+.week-col{background:#fff; border:1px solid var(--line); border-radius:9px; overflow:hidden; display:flex; flex-direction:column; min-width:0}
+.week-col.today{border-color:var(--accent-3); box-shadow:0 0 0 1px var(--accent-3) inset}
+.week-col-h{padding:7px 5px; text-align:center; border-bottom:1px solid var(--line-2); background:#F8FAFC}
+.week-col.today .week-col-h{background:var(--accent-softer)}
+.week-col-h .wd{font-size:9.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); font-weight:600}
+.week-col-h .wn{font-size:14.5px; font-weight:700; letter-spacing:-.02em}
+.week-col.today .week-col-h .wn{color:var(--accent-2)}
+.week-body{position:relative; height:440px; background-image:linear-gradient(var(--line-2) 1px, transparent 1px); background-size:100% 12.5%}
+.wblock{position:absolute; left:3px; right:3px; border-radius:5px; padding:3px 5px; font-size:9.5px; line-height:1.18; background:var(--accent-softer); border-left:3px solid var(--accent); overflow:hidden; text-align:left; transition:filter .12s}
+.wblock:hover{filter:brightness(.97)}
+.wblock .wt{font-weight:700; color:#7A5A18; font-size:8.5px; display:block}
+.wblock .wn2{font-weight:600; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.wblock .ws{color:var(--muted); font-size:8px; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.wblock.st-pendiente{background:#FCF3DE; border-left-color:#D2A442}
+.wblock.st-pendiente .wt{color:#7E5C10}
+.wblock.st-atendida{background:#EAF3EE; border-left-color:#79A48F}
+.wblock.st-atendida .wt{color:#3E6653}
+.wblock.st-cancelada{background:#F6EAEC; border-left-color:#C08A90; opacity:.85}
+.wblock.tiny{padding:2px 4px}
+.wblock.tiny .ws{display:none}
+
+/* ---------- Search / tables ---------- */
+.search-wrap{position:relative; max-width:330px; width:100%}
+.search-wrap .ico{position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--muted-2)}
+.search-wrap .input{padding-left:34px}
+.table-wrap{overflow-x:auto}
+table.t{width:100%; border-collapse:collapse; font-size:13px}
+table.t th{
+  text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+  padding:10px 14px; background:#F8FAFC; border-bottom:1px solid var(--line); font-weight:600; white-space:nowrap;
+}
+table.t td{padding:11px 14px; border-bottom:1px solid var(--line-2); vertical-align:middle; white-space:nowrap}
+table.t tr:last-child td{border-bottom:0}
+table.t tbody tr:hover{background:#F8FAFC}
+table.t .num{text-align:right; font-variant-numeric:tabular-nums; font-weight:600}
+.t-name{display:flex; align-items:center; gap:9px; font-weight:600}
+.mini{font-size:11px; color:var(--muted)}
+
+/* ---------- Consultas ---------- */
+.cons-item{display:flex; gap:11px; padding:12px 16px; border-top:1px solid var(--line-2); width:100%; text-align:left; align-items:flex-start}
+.cons-item:first-child{border-top:0}
+.cons-item:hover{background:#F8FAFC}
+.cons-item .c-main{flex:1; min-width:0}
+.cons-item .c-top{display:flex; gap:8px; align-items:baseline}
+.cons-item .c-n{font-size:13px; font-weight:600; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.cons-item .c-t{font-size:10px; color:var(--muted-2); flex:0 0 auto}
+.cons-item .c-p{font-size:11.5px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:2px; display:block}
+.cons-item .c-area{font-size:10.5px; color:#7A5A18; background:var(--accent-softer); border-radius:5px; padding:1px 6px; display:inline-block; margin-top:5px}
+.sum-strip{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:15px}
+.sum-strip .ss{background:#fff; border:1px solid var(--line); border-radius:10px; padding:11px 13px; display:flex; align-items:center; gap:10px}
+.sum-strip .ss .n{font-size:19px; font-weight:700; line-height:1.1}
+.sum-strip .ss .l{font-size:11px; color:var(--muted)}
+.sum-strip .ss .d{width:8px; height:30px; border-radius:4px; flex:0 0 8px}
+
+/* ---------- Expediente / ficha ---------- */
+.ficha-grid{display:grid; grid-template-columns:minmax(0,1fr) 322px; gap:15px; align-items:start}
+.ficha-head{display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap}
+.ficha-head .fh-main{flex:1; min-width:200px}
+.ficha-head h2{font-size:19px; font-family:'Lora',Georgia,serif; font-weight:600; line-height:1.25}
+.ficha-head .fh-sub{font-size:12px; color:var(--muted); margin-top:4px; display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.info-list{display:grid; gap:11px}
+.info-list .il{display:flex; gap:9px; align-items:flex-start; font-size:12.5px}
+.info-list .il .ico{color:var(--muted-2); margin-top:1px}
+.info-list .il span{color:var(--text)}
+.info-list .il .lbl{display:block; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; font-weight:600}
+.tl{position:relative; padding:4px 18px 16px 30px}
+.tl::before{content:""; position:absolute; left:16px; top:10px; bottom:14px; width:1px; background:var(--line)}
+.tl-item{position:relative; padding:10px 0 2px}
+.tl-item::before{content:""; position:absolute; left:-18px; top:15px; width:8px; height:8px; border-radius:50%; background:#fff; border:2px solid var(--accent); box-shadow:0 0 0 3px #fff}
+.tl-item .tl-d{font-size:10.5px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.05em}
+.tl-item .tl-t{font-size:12.5px; line-height:1.5; margin-top:2px}
+.tl-item .tl-k{font-size:10px; color:#7A5A18; background:var(--accent-softer); border-radius:4px; padding:1px 6px; display:inline-block; margin-top:4px}
+.venc{display:flex; gap:9px; align-items:flex-start; padding:9px 0; border-top:1px dashed var(--line); font-size:12px}
+.venc:first-child{border-top:0; padding-top:0}
+.venc .v-d{width:60px; flex:0 0 60px; font-weight:700; font-size:11.5px; color:var(--ink-2)}
+.venc .v-d.soon{color:var(--red)}
+.venc .v-t{flex:1; line-height:1.4}
+.note{background:#FBF8F0; border:1px solid #EDE3CC; border-radius:8px; padding:10px 12px; font-size:12px; color:#5B4A20; line-height:1.5; margin-bottom:8px}
+
+/* ---------- Facturación ---------- */
+.fact-total{display:flex; gap:22px; flex-wrap:wrap; align-items:flex-end}
+.fact-total .ft{min-width:130px}
+.fact-total .ft .l{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; font-weight:600}
+.fact-total .ft .v{font-size:25px; font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:-.03em}
+.fact-total .ft .s{font-size:11.5px; color:var(--muted)}
+.fact-total .bar-mini{flex:1; min-width:160px}
+.bar-mini .bm-track{height:10px; border-radius:6px; background:#EEF2F6; overflow:hidden; display:flex}
+.bar-mini .bm-track i{display:block; height:100%}
+.bar-mini .bm-leg{display:flex; gap:14px; font-size:11px; color:var(--muted); margin-top:6px}
+
+/* ---------- Informes ---------- */
+.chart-bars{display:flex; align-items:flex-end; gap:12px; height:176px; padding:20px 4px 0}
+.chart-bars .bar-wrap{flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:6px; height:100%; min-width:0}
+.chart-bars .bar{width:100%; max-width:48px; border-radius:6px 6px 2px 2px; background:linear-gradient(180deg,#D6B978,#B08A3E); min-height:3px; position:relative}
+.chart-bars .bar .bv{position:absolute; top:-18px; left:0; right:0; text-align:center; font-size:10px; font-weight:700; color:#7A5A18}
+.chart-bars .bl{font-size:10.5px; color:var(--muted); font-weight:500; text-align:center; text-transform:capitalize}
+.hbar{margin-bottom:12px}
+.hbar-top{display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px; gap:10px}
+.hbar-top .n{font-weight:600}
+.hbar-top .v{color:var(--muted); font-weight:600; white-space:nowrap}
+.hbar-track{height:9px; background:#EDF1F5; border-radius:6px; overflow:hidden}
+.hbar-fill{height:100%; border-radius:6px; background:linear-gradient(90deg,#D6B978,#8F6B25)}
+.donut-wrap{display:flex; align-items:center; gap:20px; flex-wrap:wrap}
+.donut{width:146px; height:146px; flex:0 0 146px}
+.donut circle{fill:none; stroke-width:19}
+.donut-legend{display:grid; gap:8px; font-size:12px; flex:1; min-width:130px}
+.donut-legend div{display:flex; align-items:center; gap:7px; justify-content:space-between; border-bottom:1px dashed var(--line); padding-bottom:5px}
+.donut-legend .l{display:flex; align-items:center; gap:7px; color:var(--muted)}
+.donut-legend .n{font-weight:700}
+.legend-dot{width:9px;height:9px;border-radius:3px;display:inline-block}
+
+/* ---------- Ajustes ---------- */
+.set-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,330px); gap:15px; align-items:start}
+.set-grid > *, .dcols > *, .dcols-3 > *, .ficha-grid > *, .sum-strip > *{min-width:0}
+.set-row{display:flex; align-items:center; gap:12px; padding:11px 18px; border-top:1px solid var(--line-2); flex-wrap:wrap}
+.set-row:first-child{border-top:0}
+.set-row .s-main{flex:1; min-width:150px}
+.set-row .s-t{font-size:13px; font-weight:600}
+.set-row .s-s{font-size:11px; color:var(--muted)}
+.set-row .s-ctl{display:flex; gap:7px; align-items:center}
+.inline-num{width:82px; padding:7px 9px; text-align:right; border:1px solid var(--line); border-radius:7px; font-size:12.5px; font-weight:600}
+.inline-num:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.switch{position:relative; width:40px; height:23px; flex:0 0 40px; border-radius:20px; background:#D3DCE6; transition:background .18s}
+.switch::after{content:""; position:absolute; top:3px; left:3px; width:17px;height:17px;border-radius:50%; background:#fff; transition:transform .18s; box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch.on{background:var(--accent-2)}
+.switch.on::after{transform:translateX(17px)}
+.hours-row{display:flex; align-items:center; gap:10px; padding:9px 18px; border-top:1px solid var(--line-2); font-size:12.5px; flex-wrap:wrap}
+.hours-row:first-child{border-top:0}
+.hours-row .d{width:106px; font-weight:600; text-transform:capitalize}
+.hours-row .t{display:flex; align-items:center; gap:6px; color:var(--muted); font-size:12px}
+.hours-row input[type=time]{border:1px solid var(--line); border-radius:7px; padding:5px 7px; font-size:12px; font-weight:600}
+.preview-msg{background:#E7F0EA; border:1px solid #C9E1D4; border-radius:11px 11px 11px 3px; padding:11px 13px; font-size:12.5px; line-height:1.55; color:#1F3A2B}
+.preview-wrap{padding:14px 18px 18px; background:#FAFCFD; border-top:1px solid var(--line-2)}
+.preview-lbl{font-size:10px; text-transform:uppercase; letter-spacing:.09em; color:var(--muted); font-weight:700; margin-bottom:8px}
+
+/* ---------- Modal / toast ---------- */
+.overlay{position:fixed; inset:0; background:rgba(14,33,56,.46); display:flex; align-items:center; justify-content:center; z-index:100; padding:18px; animation:fade .15s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal{
+  background:#fff; border-radius:14px; width:100%; max-width:530px; box-shadow:0 24px 70px rgba(14,33,56,.3);
+  max-height:92vh; display:flex; flex-direction:column; animation:pop .18s ease;
+}
+@keyframes pop{from{transform:translateY(8px) scale(.99); opacity:.6}to{transform:none; opacity:1}}
+.modal.wide{max-width:660px}
+.modal-h{display:flex; align-items:flex-start; gap:12px; padding:17px 19px 11px}
+.modal-h h3{font-size:17px; font-family:'Lora',Georgia,serif; font-weight:600}
+.modal-h .sub{font-size:12px; color:var(--muted); margin-top:2px}
+.modal-x{margin-left:auto; padding:5px; border-radius:7px; color:var(--muted)}
+.modal-x:hover{background:#F2F5F8; color:var(--text)}
+.modal-b{padding:4px 19px 6px; overflow-y:auto}
+.modal-f{padding:13px 19px 17px; display:flex; gap:8px; justify-content:flex-end; border-top:1px solid var(--line-2); margin-top:10px; flex-wrap:wrap}
+.form-grid{display:grid; grid-template-columns:1fr 1fr; gap:11px}
+.form-grid .full{grid-column:1/-1}
+.detail-rows{display:grid; gap:0; border:1px solid var(--line-2); border-radius:9px; overflow:hidden; margin-bottom:13px}
+.detail-rows .dr{display:flex; gap:10px; padding:10px 12px; border-top:1px solid var(--line-2); font-size:12.5px}
+.detail-rows .dr:first-child{border-top:0}
+.detail-rows .dr .k{color:var(--muted); width:108px; flex:0 0 108px; font-size:11.5px}
+.detail-rows .dr .v{font-weight:600; flex:1; min-width:0}
+.toast{
+  position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(12px); z-index:200;
+  background:var(--ink); color:#fff; padding:11px 17px; border-radius:9px; font-size:12.5px; font-weight:500;
+  box-shadow:0 10px 30px rgba(14,33,56,.3); opacity:0; transition:all .22s; pointer-events:none; max-width:92vw;
+  display:flex; align-items:center; gap:8px;
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+.toast.err{background:#8C2F37}
+
+/* ---------- Misc ---------- */
+.footer{padding:15px 24px 20px; border-top:1px solid var(--line); font-size:11px; color:var(--muted-2); line-height:1.6; display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+.footer .brand-mini{font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-size:9.5px}
+.empty{padding:26px 18px; text-align:center; color:var(--muted); font-size:12.5px}
+.alert-row{display:flex; gap:10px; align-items:flex-start; padding:11px 18px; border-top:1px solid var(--line-2); width:100%; text-align:left}
+.alert-row:hover{background:#F8FAFC}
+.alert-row .a-ico{width:29px;height:29px;border-radius:7px;display:grid;place-items:center;flex:0 0 29px}
+.alert-row .a-main{flex:1; min-width:0}
+.alert-row .a-t{font-size:12.5px; font-weight:600; display:block; line-height:1.35}
+.alert-row .a-s{font-size:11px; color:var(--muted); margin-top:1px; display:block}
+.a-amber{background:var(--amber-soft); color:var(--amber)}
+.a-red{background:var(--red-soft); color:var(--red)}
+.a-gold{background:var(--accent-soft); color:#7A5A18}
+.a-blue{background:var(--blue-soft); color:var(--blue)}
+@media (max-width:1100px){
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dcols,.dcols-3,.set-grid,.ficha-grid{grid-template-columns:minmax(0,1fr)}
+  .sum-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:880px){
+  :root{--sidebar-w:268px}
+  .sidebar{position:fixed; left:0; top:0; transform:translateX(-100%); box-shadow:0 0 60px rgba(14,33,56,.4); width:268px; flex-basis:268px}
+  .sidebar.open{transform:none}
+  .side-close{display:block}
+  .app.collapsed .sidebar{width:268px; flex-basis:268px}
+  .app.collapsed .side-head{padding:20px 18px 16px; justify-content:flex-start}
+  .app.collapsed .side-head .b-txt,
+  .app.collapsed .side-label,
+  .app.collapsed .nav-item span.nav-t,
+  .app.collapsed .nav-badge,
+  .app.collapsed .side-foot{display:block}
+  .app.collapsed .side-foot{display:block}
+  .app.collapsed .nav-item{justify-content:flex-start; padding:9.5px 11px}
+  .app.collapsed .side-nav{padding:14px 11px}
+  .topbar .collapse-btn{display:none}
+  .topbar{padding:10px 13px; min-height:56px}
+  .view{padding:15px 13px}
+  .page-head h1{font-size:19px}
+  .topbar-title .d{display:none}
+  .chip-date .txt{display:none}
+  .user-btn .u-meta{display:none}
+  .login{grid-template-columns:1fr}
+  .login-art{display:none}
+  .login-card .mobile-brand{display:flex; margin-bottom:24px}
+  .login-panel{padding:26px 20px; align-items:flex-start}
+  .kpis{gap:10px}
+  .kpi .k-val{font-size:22px}
+  .card-pad{padding:14px}
+  .card-head{padding:13px 14px}
+  .row{padding:11px 14px}
+  .footer{padding:14px}
+  .modal-f{justify-content:stretch}
+  .modal-f .btn{flex:1}
+  .fact-total{gap:14px}
+  .fact-total .ft .v{font-size:21px}
+}
+@media (max-width:520px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi{padding:13px}
+  .kpi .k-val{font-size:19px}
+  .kpi .k-sub{flex-wrap:wrap; line-height:1.4}
+  .form-grid{grid-template-columns:1fr}
+  .user-menu{right:12px; top:56px}
+  .gantt{min-width:640px}
+  .week-wrap{min-width:640px}
+  .sum-strip{grid-template-columns:1fr 1fr}
+  .chart-bars{gap:6px}
+  .tl{padding-left:26px}
+  .tl::before{left:12px}
+  .tl-item::before{left:-14px}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<section class="login" id="login">
+  <div class="login-art">
+    <div class="brand">
+      <div class="brand-mark">BV</div>
+      <div>
+        <div class="brand-name">Baltodano Valverde</div>
+        <div class="brand-sub">Bufete de abogados · San José</div>
+      </div>
+    </div>
+    <div class="login-copy">
+      <div class="eyebrow">Sistema de gestión</div>
+      <h1>La agenda, los expedientes y los honorarios del bufete, en orden.</h1>
+      <p>Consultas que llegan, citas que se agendan, expedientes con su bitácora y cobros del mes. Todo lo que el despacho atiende en un solo panel, sin papeles sueltos ni agendas paralelas.</p>
+      <ul class="login-list">
+        <li><svg class="ico" viewBox="0 0 24 24"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg><span>Agenda por abogado, con la duración real de cada diligencia</span></li>
+        <li><svg class="ico" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.8 8.8 0 0 1-4-.9L3 21l1.9-4.9A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg><span>Bandeja de consultas con seguimiento y conversión a cita</span></li>
+        <li><svg class="ico" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg><span>Expedientes con vencimientos y bitácora de actuaciones</span></li>
+        <li><svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg><span>Honorarios del mes, cobrado y pendiente, e informes del despacho</span></li>
+      </ul>
+    </div>
+    <div class="login-foot">Demo de referencia · Nocodeveloper</div>
+  </div>
+  <div class="login-panel">
+    <div class="login-card">
+      <div class="brand mobile-brand">
+        <div class="brand-mark">BV</div>
+        <div>
+          <div class="brand-name" style="color:#12263F">Baltodano Valverde</div>
+          <div class="brand-sub" style="color:#64748B">Sistema de gestión</div>
+        </div>
+      </div>
+      <h2>Entrar al sistema</h2>
+      <p class="lead">Acceso del bufete. Esta es una versión de demostración.</p>
+      <div class="field">
+        <label for="login-user">Usuario</label>
+        <input class="input" id="login-user" type="text" value="recepcion@baltodanovalverde.cr" readonly>
+      </div>
+      <div class="field">
+        <label for="login-pass">Contraseña</label>
+        <input class="input" id="login-pass" type="password" value="demo" readonly>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="enterApp()">Entrar en modo demostración</button>
+      <div class="login-hint">
+        <svg class="ico ico-sm" viewBox="0 0 24 24" style="margin-top:2px"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+        <span>Modo demostración: no se envía ningún mensaje ni se guarda nada fuera de esta pantalla.</span>
+      </div>
+      <p class="login-note">Bufete del Lic. Oscar Felipe Baltodano Valverde<br>San José, Costa Rica · WhatsApp +506 8631 0255<br>Demo hecho por Nocodeveloper</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= APP ================= -->
+<div class="app hidden" id="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="side-head">
+      <div class="brand-mark">BV</div>
+      <div class="b-txt">
+        <div class="brand-name">Baltodano Valverde</div>
+        <div class="brand-sub">Bufete de abogados</div>
+      </div>
+      <button class="side-close" onclick="toggleSide(false)" aria-label="Cerrar menú">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <nav class="side-nav" id="nav" aria-label="Secciones"></nav>
+    <div class="side-foot">
+      <strong>Bufete Baltodano Valverde</strong>
+      San José, Costa Rica<br>
+      <span id="sideFootMeta"></span>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <button class="hamburger" onclick="toggleSide(true)" aria-label="Abrir menú">
+        <svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <button class="collapse-btn" onclick="toggleCollapse()" aria-label="Colapsar menú">
+        <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M14 9l-2 3 2 3"/></svg>
+      </button>
+      <div class="topbar-title">
+        <span class="t" id="tbTitle">Escritorio</span>
+        <span class="d" id="tbDate"></span>
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions">
+        <span class="chip-date"><svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg><span class="txt" id="chipToday"></span></span>
+        <button class="user-btn" onclick="toggleUserMenu(event)">
+          <span class="avatar">OB</span>
+          <span class="u-meta" style="text-align:left">
+            <span class="un" style="display:block">Lic. Baltodano</span>
+            <span class="ur" style="display:block">Socio director</span>
+          </span>
+          <svg class="ico ico-sm" viewBox="0 0 24 24" style="color:#93A1B3"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+      </div>
+    </header>
+    <main class="view" id="view"></main>
+    <footer class="footer">
+      <span class="brand-mini">Nocodeveloper</span>
+      <span>Demo de referencia hecho por Nocodeveloper. Los datos son de ejemplo; en el sistema real se cargan los del bufete.</span>
+    </footer>
+  </div>
+</div>
+
+<div id="menuRoot"></div>
+<div id="modalRoot"></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ============================================================
+   DEMO · Bufete Baltodano Valverde — datos de ejemplo
+   Todo se genera en el navegador, relativo a la fecha de apertura.
+   No hay backend, no se envía nada y no se guarda nada.
+   ============================================================ */
+const ICONS = {
+  home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 10v10h5v-6h4v6h5V10"/>',
+  calendar:'<path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>',
+  chat:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.8 8.8 0 0 1-4-.9L3 21l1.9-4.9A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/>',
+  folder:'<path d="M4 20a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2z"/>',
+  users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+  receipt:'<path d="M4 2h16v20l-3-2-3 2-3-2-3 2-3-2z"/><path d="M8 7h8M8 11h8M8 15h5"/>',
+  chart:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+  arrowLeft:'<path d="M19 12H5M12 19l-7-7 7-7"/>',
+  arrowRight:'<path d="M5 12h14M12 5l7 7-7 7"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  phone:'<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>',
+  mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/>',
+  pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  bell:'<path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>',
+  logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/>',
+  external:'<path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
+  file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>',
+  edit:'<path d="M17 3a2.8 2.8 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5z"/>',
+  scale:'<path d="M12 3v18M7 21h10M5 7h14"/><path d="M5 7 2 14h6zM19 7l-3 7h6z"/>',
+  alert:'<path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+  building:'<path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M15 9h2a2 2 0 0 1 2 2v10"/><path d="M8 7h4M8 11h4M8 15h4"/>',
+  chevron:'<path d="M6 9l6 6 6-6"/>',
+  filter:'<path d="M3 5h18l-7 8v6l-4 2v-8z"/>',
+  send:'<path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/>',
+  user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  briefcase:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M2 13h20"/>'
+};
+function icon(n, cls){
+  return '<svg class="ico ' + (cls || '') + '" viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[n] || '') + '</svg>';
+}
+
+/* --- utilidades --- */
+const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const MSHORT = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const DAYS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const DAYS_SHORT = ['dom','lun','mar','mié','jue','vie','sáb'];
+const DAY_START = 8, DAY_END = 18;
+const SPAN = (DAY_END - DAY_START) * 60;
+const PUBLIC_URL = 'https://clientes-demo-baltodano.rddxeh.easypanel.host/';
+
+function pad(n){ return String(n).padStart(2, '0'); }
+function iso(d){ return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function parseISO(s){ const p = s.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2]); }
+function addDays(d, n){ const x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
+function startOfWeek(d){ const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); const wd = (x.getDay() + 6) % 7; return addDays(x, -wd); }
+function fmtLong(d){
+  const s = DAYS[d.getDay()] + ' ' + d.getDate() + ' de ' + MONTHS[d.getMonth()] + ' de ' + d.getFullYear();
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+function fmtShort(d){ return DAYS_SHORT[d.getDay()] + ' ' + d.getDate() + ' ' + MSHORT[d.getMonth()]; }
+function fmtDate(isoStr){
+  if(!isoStr) return '—';
+  const d = parseISO(isoStr);
+  return d.getDate() + ' ' + MSHORT[d.getMonth()] + ' ' + d.getFullYear();
+}
+function to12(t){ const p = t.split(':').map(Number); const ap = p[0] >= 12 ? 'p.m.' : 'a.m.'; const hh = p[0] % 12 === 0 ? 12 : p[0] % 12; return hh + ':' + pad(p[1]) + ' ' + ap; }
+function to24(t){ return t; }
+function minutes(t){ const p = t.split(':').map(Number); return p[0] * 60 + p[1]; }
+function hhmm(T){ return pad(Math.floor(T / 60)) + ':' + pad(T % 60); }
+function fmtCRC(n){ return '₡' + Math.round(n).toLocaleString('es-CR'); }
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function initials(name){ return name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase(); }
+function shortName(name){ return name.split(' ').filter(Boolean).slice(0, 2).join(' '); }
+function daysUntil(isoStr){ return Math.round((parseISO(isoStr).getTime() - TODAY.getTime()) / 86400000); }
+
+/* RNG determinista: los mismos datos en cada carga del mismo día */
+let _seed = 20261122;
+function rnd(){ _seed = (_seed * 1664525 + 1013904223) % 4294967296; return _seed / 4294967296; }
+function pick(a){ return a[Math.floor(rnd() * a.length)]; }
+function pickW(a){ const tot = a.reduce((s, x) => s + x[1], 0); let r = rnd() * tot, acc = 0; for(const it of a){ acc += it[1]; if(r <= acc) return it[0]; } return a[a.length - 1][0]; }
+function intBetween(a, b){ return a + Math.floor(rnd() * (b - a + 1)); }
+
+const TODAY = (() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); })();
+
+/* --- áreas y abogados --- */
+const AREAS = [
+  {id:'civil', name:'Civil', color:'#2F6493'},
+  {id:'laboral', name:'Laboral', color:'#8F6B25'},
+  {id:'familia', name:'Familia', color:'#71558F'},
+  {id:'notarial', name:'Notarial', color:'#2C7A5B'}
+];
+const areaOf = id => AREAS.find(a => a.id === id) || AREAS[0];
+
+const LAWYERS = [
+  {id:'obl', name:'Oscar Baltodano', full:'Lic. Oscar Felipe Baltodano Valverde', role:'Socio director · civil y notarial', color:'#1B3A5C', areas:['civil','notarial']},
+  {id:'mrs', name:'Mariana Rojas', full:'Lic. Mariana Rojas Salas', role:'Familia', color:'#71558F', areas:['familia']},
+  {id:'jcc', name:'Jorge Cambronero', full:'Lic. Jorge Cambronero Chaves', role:'Laboral', color:'#8F6B25', areas:['laboral','civil']},
+  {id:'alg', name:'Ana Lucía Granados', full:'Lic. Ana Lucía Granados Mora', role:'Civil y notarial', color:'#2C7A5B', areas:['notarial','civil']}
+];
+const lawyer = id => LAWYERS.find(l => l.id === id) || LAWYERS[0];
+
+/* --- tipos de consulta y su duración real --- */
+let TIPOS = [
+  {id:'t1', name:'Consulta inicial', dur:45, area:'civil'},
+  {id:'t2', name:'Consulta de seguimiento', dur:30, area:'civil'},
+  {id:'t3', name:'Audiencia', dur:90, area:'civil'},
+  {id:'t4', name:'Mediación / conciliación', dur:120, area:'laboral'},
+  {id:'t5', name:'Revisión de contrato', dur:60, area:'civil'},
+  {id:'t6', name:'Firma de escritura', dur:60, area:'notarial'},
+  {id:'t7', name:'Poder notarial', dur:30, area:'notarial'},
+  {id:'t8', name:'Redacción de demanda', dur:90, area:'laboral'},
+  {id:'t9', name:'Entrevista de familia', dur:60, area:'familia'}
+];
+const tipo = id => TIPOS.find(t => t.id === id) || TIPOS[0];
+
+/* --- clientes --- */
+const NOM_M = ['José','Carlos','Luis','Marco','Andrés','Randall','Esteban','Mauricio','Gilberto','Álvaro','Rodrigo','Fabián','Gerardo','Óscar','Javier','Minor'];
+const NOM_F = ['María','Ana','Laura','Sofía','Carolina','Marcela','Gabriela','Verónica','Silvia','Andrea','Daniela','Priscilla','Xinia','Lorena','Tatiana','Ivannia'];
+const APE = ['Rodríguez','Vargas','Jiménez','Solano','Quesada','Mora','Rojas','Alfaro','Chaves','Brenes','Salazar','Monge','Arias','Castro','Fallas','Zúñiga','Cordero','Umaña','Esquivel','Valverde','Granados','Cambronero','Arguedas','Picado','Naranjo','Segura','Villalobos','Herrera','Campos','Ulate','Badilla','Obando','Leitón','Fonseca','Guzmán','Sandí','Venegas','Zamora','Araya','Masis'];
+const PROV = [
+  ['San José','San José'],['San José','Escazú'],['San José','Moravia'],['San José','Desamparados'],['San José','Curridabat'],
+  ['Heredia','Heredia'],['Heredia','Barva'],['Alajuela','Alajuela'],['Alajuela','Grecia'],['Cartago','Cartago'],['Cartago','Tres Ríos'],['Puntarenas','Puntarenas']
+];
+const EMPRESAS = [
+  'Constructora Valle Verde S.A.','Distribuidora El Roble S.R.L.','Transportes Chirripó S.A.','Farmacia La Sabana S.A.',
+  'Inversiones Aurora S.A.','Panadería Doña Elena S.R.L.','Talleres Metálicos del Sur S.A.','Hotel Los Cedros S.A.'
+];
+const CANALES = ['WhatsApp','Llamada','Correo','Reunión'];
+
+const CLIENTS = [];
+(function buildClients(){
+  const used = new Set();
+  let n = 0;
+  // 27 personas físicas
+  while(n < 27){
+    const fem = rnd() > 0.45;
+    const name = pick(fem ? NOM_F : NOM_M) + ' ' + pick(APE) + ' ' + pick(APE);
+    if(used.has(name)) continue;
+    used.add(name);
+    n++;
+    const [prov, cant] = pick(PROV);
+    CLIENTS.push({
+      id: 'c' + n,
+      name: name,
+      kind: 'Persona física',
+      doc: '1-' + intBetween(1001, 1899) + '-' + intBetween(1000, 9999),
+      phone: '+506 ' + intBetween(6, 8) + intBetween(100, 999) + ' ' + intBetween(1000, 9999),
+      email: name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(' ').slice(0, 2).join('.') + '@correo.cr',
+      prov: prov, cant: cant,
+      since: iso(addDays(TODAY, -intBetween(60, 1400))),
+      ref: pick(['Recomendación de un cliente','Google','Facebook','Pasó por el bufete','WhatsApp','Referido de un colega'])
+    });
+  }
+  // 8 personas jurídicas
+  EMPRESAS.forEach((emp, i) => {
+    const [prov, cant] = pick(PROV);
+    const rep = pick(NOM_F) + ' ' + pick(APE) + ' ' + pick(APE);
+    CLIENTS.push({
+      id: 'c' + (28 + i),
+      name: emp,
+      kind: 'Persona jurídica',
+      doc: '3-101-' + intBetween(100000, 899999),
+      phone: '+506 ' + intBetween(2, 2) + intBetween(200, 299) + ' ' + intBetween(1000, 9999),
+      email: 'contacto@' + emp.toLowerCase().split(' ')[0].normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '') + '.cr',
+      prov: prov, cant: cant,
+      since: iso(addDays(TODAY, -intBetween(120, 1600))),
+      ref: pick(['Recomendación de un cliente','Sitio web','Contacto directo','Referido de un colega']),
+      contact: rep
+    });
+  });
+})();
+const cli = id => CLIENTS.find(c => c.id === id);
+
+/* --- expedientes --- */
+const TEMPLATES = {
+  civil: [
+    ['Cobro de obligaciones','cobro'],
+    ['Resolución de contrato de arrendamiento','arrendamiento'],
+    ['Daños y perjuicios por accidente de tránsito','daños'],
+    ['Proceso de usucapión','usucapión'],
+    ['Desalojo por falta de pago','desalojo'],
+    ['Nulidad de escritura','nulidad'],
+    ['Cobro de honorarios profesionales','cobro']
+  ],
+  laboral: [
+    ['Despido injustificado','despido'],
+    ['Reinstalación laboral','reinstalación'],
+    ['Pago de aguinaldo y prestaciones','prestaciones'],
+    ['Riesgos del trabajo','riesgos'],
+    ['Discriminación en el trabajo','discriminación'],
+    ['Diferencias salariales','salarios']
+  ],
+  familia: [
+    ['Divorcio por mutuo consentimiento','divorcio'],
+    ['Pensión alimentaria','pensión'],
+    ['Régimen de visitas y relaciones familiares','visitas'],
+    ['Unión de hecho','unión de hecho'],
+    ['Violencia doméstica','medida de protección'],
+    ['Modificación de pensión alimentaria','pensión']
+  ],
+  notarial: [
+    ['Escritura de compraventa','compraventa'],
+    ['Poder generalísimo','poder'],
+    ['Testamento abierto','testamento'],
+    ['Constitución de hipoteca','hipoteca'],
+    ['Constitución de sociedad anónima','sociedad'],
+    ['Protocolización de documentos','protocolización']
+  ]
+};
+const BITACORA = {
+  civil: [
+    'Se presentó escrito de contestación en el Juzgado Civil de San José.',
+    'Notificación de la resolución que fija la audiencia preliminar.',
+    'Se aportó prueba documental: tres folios presentados en la Secretaría.',
+    'Revisión del expediente en el despacho con el cliente.',
+    'Se solicitó copia certificada del expediente a la Secretaría del Juzgado.',
+    'Se presentó alegato de conclusión.'
+  ],
+  laboral: [
+    'Se presentó la demanda ante el Juzgado de Trabajo de San José.',
+    'Audiencia de conciliación celebrada; no hubo acuerdo.',
+    'Se ofreció prueba testimonial y documental.',
+    'Depósito de la planilla preliminar de liquidación.',
+    'Se recibió liquidación parcial del empleador y se revisó con el cliente.',
+    'Inspección del centro de trabajo coordinada con el despacho.'
+  ],
+  familia: [
+    'Entrevista inicial con el cliente y revisión de documentos.',
+    'Se presentó la solicitud ante el Juzgado de Familia.',
+    'Audiencia única realizada; se dejó constancia de la comparecencia.',
+    'Se remitió copia de la resolución al cliente por WhatsApp.',
+    'Se solicitó valoración psicosocial.',
+    'Se presentó propuesta de arreglo extrajudicial.'
+  ],
+  notarial: [
+    'Se recibieron los documentos para el protocolo.',
+    'Borrador de escritura enviado al cliente para revisión.',
+    'Firma de la escritura ante notario.',
+    'Inscripción presentada ante el Registro Nacional.',
+    'Certificación notarial emitida y entregada.',
+    'Se completó el trámite de protocolización.'
+  ]
+};
+const JUZGADOS = {
+  civil: ['Juzgado Civil de San José','Juzgado Civil de Heredia','Juzgado Civil de Alajuela','Juzgado Civil de Cartago'],
+  laboral: ['Juzgado de Trabajo de San José','Juzgado de Trabajo de Heredia','Juzgado de Trabajo de Alajuela'],
+  familia: ['Juzgado de Familia de San José','Juzgado de Familia de Heredia','Juzgado de Familia de Cartago'],
+  notarial: ['Protocolo del bufete']
+};
+const ESTADOS_EXP = [
+  ['en estudio', 22],['en trámite', 44],['en audiencia', 14],['cerrado', 20]
+];
+const EXPEDIENTS = [];
+(function buildExpedientes(){
+  const clientes = CLIENTS.slice();
+  let k = 0;
+  const count = 45;
+  for(let i = 0; i < count; i++){
+    const cliente = i < clientes.length ? clientes[i] : pick(clientes);
+    const area = pickW([['civil', 38],['laboral', 24],['familia', 22],['notarial', 16]]);
+    const tpl = pick(TEMPLATES[area]);
+    const libros = LAWYERS.filter(l => l.areas.includes(area));
+    const ab = pick(libros.length ? libros : LAWYERS);
+    const estado = pickW(ESTADOS_EXP);
+    const abierto = addDays(TODAY, -intBetween(35, 780));
+    const años = String(abierto.getFullYear()).slice(2);
+    const num = años + '-' + pad(intBetween(1, 12)) + String(intBetween(1000, 9999)) + '-1027-' +
+      ({civil:'CJ', laboral:'LA', familia:'FA', notarial:'NT'}[area]);
+    const caratula = cliente.kind === 'Persona jurídica'
+      ? apellidosDe(cliente) + ' S.A. c/ ' + pick(APE) + ' ' + pick(APE)
+      : apellidosDe(cliente) + ' c/ ' + pick(APE) + ' ' + pick(APE);
+    const bit = [];
+    const nb = intBetween(4, 7);
+    let bd = addDays(abierto, 4);
+    for(let j = 0; j < nb; j++){
+      bit.push({
+        date: iso(bd),
+        tipo: pick(['Escrito','Resolución','Audiencia','Reunión','Trámite','Notificación']),
+        texto: pick(BITACORA[area])
+      });
+      bd = addDays(bd, intBetween(9, 55));
+      if(bd > TODAY) bd = addDays(TODAY, -intBetween(2, 20));
+    }
+    bit.sort((a, b) => b.date.localeCompare(a.date));
+    const cuantia = area === 'notarial' ? intBetween(15, 180) * 100000 : intBetween(3, 90) * 100000;
+    EXPEDIENTS.push({
+      id: 'e' + (++k),
+      num: num,
+      clienteId: cliente.id,
+      area: area,
+      materia: tpl[0],
+      caratula: caratula,
+      abogadoId: ab.id,
+      estado: estado,
+      abierto: iso(abierto),
+      cuantia: cuantia,
+      juzgado: JUZGADOS[area] ? pick(JUZGADOS[area]) : 'Protocolo del bufete',
+      bitacora: bit,
+      vencimientos: [],
+      resumen: resumenDe(area, tpl[0], cliente)
+    });
+  }
+})();
+function apellidosDe(c){
+  const p = c.name.split(' ');
+  if(c.kind === 'Persona jurídica') return shortName(c.name).replace(/ S\.A\.| S\.R\.L\./g, '');
+  if(p.length < 3) return p.slice(1).join(' ');
+  return p[1] === p[2] ? p[1] : p[1] + ' ' + p[2];
+}
+function resumenDe(area, materia, cliente){
+  const quien = cliente.kind === 'Persona jurídica' ? 'la empresa' : 'el cliente';
+  const m = {
+    civil: 'Expediente de ' + materia.toLowerCase() + '. Se ordenó la prueba, se revisaron los documentos aportados por ' + quien + ' y se prepara el siguiente escrito.',
+    laboral: 'Proceso laboral por ' + materia.toLowerCase() + '. Se fijó la audiencia y se coordinó con ' + quien + ' la prueba testimonial.',
+    familia: 'Proceso de familia por ' + materia.toLowerCase() + '. Se acompañó a ' + quien + ' en la audiencia y se da seguimiento a las medidas ordenadas.',
+    notarial: 'Trámite notarial de ' + materia.toLowerCase() + '. Se prepararon los documentos, se coordinó la firma y queda pendiente la inscripción registral.'
+  };
+  return m[area];
+}
+const exp = id => EXPEDIENTS.find(e => e.id === id);
+
+/* --- vencimientos próximos (10) --- */
+(function buildVencimientos(){
+  const abiertos = EXPEDIENTS.filter(e => e.estado !== 'cerrado');
+  const etiquetas = [
+    'Presentar escrito de contestación',
+    'Audiencia preliminar en el Juzgado',
+    'Vence plazo para ofrecer prueba',
+    'Entrega de documentos al Registro Nacional',
+    'Revisión de la resolución notificada',
+    'Audiencia única de familia',
+    'Presentar alegato de conclusión',
+    'Firma de escritura en notaría',
+    'Vence término para apelar',
+    'Conferencia con el cliente y testigos'
+  ];
+  for(let i = 0; i < 10; i++){
+    const e = abiertos[i % abiertos.length];
+    const d = addDays(TODAY, [1,2,3,4,5,6,7,8,10,13][i]);
+    const v = {date: iso(d), label: etiquetas[i]};
+    e.vencimientos.push(v);
+  }
+  abiertos.slice(10, 18).forEach((e, i) => {
+    e.vencimientos.push({date: iso(addDays(TODAY, intBetween(15, 40))), label: pick(['Revisión del expediente','Presentar escrito de seguimiento','Audiencia de juicio','Actualizar prueba documental'])});
+  });
+  abiertos.forEach(e => {
+    if(!e.vencimientos.length){
+      e.vencimientos.push({date: iso(addDays(TODAY, intBetween(4, 45))), label: pick(['Revisión del expediente','Presentar escrito de seguimiento','Audiencia de juicio','Actualizar prueba documental'])});
+    }
+  });
+})();
+
+/* --- citas del mes (~80) --- */
+const CITAS = [];
+let _citaId = 0;
+function citaConflictos(abogadoId, dateISO, time, dur, ignoreId){
+  const ini = minutes(time), fin = ini + dur;
+  return CITAS.filter(c => c.abogadoId === abogadoId && c.date === dateISO && c.id !== ignoreId)
+    .filter(c => {
+      const ci = minutes(c.time), cf = ci + c.dur;
+      return ini < cf && fin > ci;
+    });
+}
+function addCita(o){
+  const c = Object.assign({id:'a' + (++_citaId), estado:'pendiente', nota:''}, o);
+  CITAS.push(c);
+  CITAS.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  return c;
+}
+(function buildCitas(){
+  const y = TODAY.getFullYear(), m = TODAY.getMonth();
+  const dim = new Date(y, m + 1, 0).getDate();
+  const tiposPorArea = a => TIPOS.filter(t => t.area === a);
+  for(let d = 1; d <= dim; d++){
+    const dt = new Date(y, m, d);
+    const wd = dt.getDay();
+    const isToday = iso(dt) === iso(TODAY);
+    let n = wd === 0 ? 1 : wd === 6 ? 2 : 3;
+    if(isToday) n = 6;
+    for(let i = 0; i < n; i++){
+      let placed = false;
+      for(let tries = 0; tries < 24 && !placed; tries++){
+        const ab = pickW([['obl', 1.4], ['mrs', 1], ['jcc', 1], ['alg', 1]].map(x => [LAWYERS.find(l => l.id === x[0]), x[1]]));
+        const abArea = ab.areas[Math.floor(rnd() * ab.areas.length)];
+        const tp = pick(tiposPorArea(abArea));
+        const earliest = wd === 0 ? 9 * 60 : wd === 6 ? 8 * 60 : 8 * 60;
+        const latest = isToday ? 16 * 60 : wd === 0 ? 12 * 60 : wd === 6 ? 11 * 60 : 16 * 60;
+        const startMin = earliest + 30 * intBetween(0, Math.max(0, Math.floor((latest - earliest) / 30)));
+        const t = hhmm(startMin);
+        if(citaConflictos(ab.id, iso(dt), t, tp.dur).length) continue;
+        const cliente = pick(CLIENTS);
+        const c = addCita({
+          date: iso(dt), time: t, dur: tp.dur, tipoId: tp.id, abogadoId: ab.id,
+          clienteId: cliente.id,
+          estado: dt < TODAY ? 'atendida' : (dt.getTime() === TODAY.getTime() ? (i < 3 ? 'atendida' : (rnd() > .5 ? 'confirmada' : 'pendiente')) : (rnd() > .3 ? 'confirmada' : 'pendiente'))
+        });
+        placed = true;
+      }
+    }
+  }
+  CITAS.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+})();
+
+/* --- consultas entrantes (12) --- */
+const CONSULTAS = [
+  {nombre:'Karla Jiménez Solano', tel:'+506 8712 4409', motivo:'Consulta por pensión alimentaria de dos hijos menores', area:'familia', dias:0, canal:'WhatsApp', estado:'nuevo'},
+  {nombre:'Rodrigo Alfaro Umaña', tel:'+506 8830 1176', motivo:'Despido sin preaviso después de seis años', area:'laboral', dias:0, canal:'Llamada', estado:'nuevo'},
+  {nombre:'Marta Esquivel Rojas', tel:'+506 7015 6623', motivo:'Necesita poder especial para trámite en el extranjero', area:'notarial', dias:1, canal:'WhatsApp', estado:'nuevo'},
+  {nombre:'Constructora Ríos del Este S.A.', tel:'+506 2245 8890', motivo:'Revisión de contrato de obra y cláusula de multa', area:'civil', dias:1, canal:'Correo', estado:'nuevo'},
+  {nombre:'Luis Fernando Quesada', tel:'+506 8644 2018', motivo:'Herencia: dos hermanos no llegan a acuerdo', area:'civil', dias:2, canal:'WhatsApp', estado:'contactado'},
+  {nombre:'Andrea Solís Brenes', tel:'+506 8955 7731', motivo:'Divorcio por mutuo consentimiento, sin hijos', area:'familia', dias:2, canal:'Llamada', estado:'contactado'},
+  {nombre:'Talleres Metálicos del Sur S.A.', tel:'+506 2288 4410', motivo:'Acoso laboral de un supervisor a tres operarios', area:'laboral', dias:3, canal:'Correo', estado:'contactado'},
+  {nombre:'Priscilla Mora Castro', tel:'+506 8377 1912', motivo:'Compraventa de casa en Escazú, revisar escritura', area:'notarial', dias:4, canal:'WhatsApp', estado:'cita agendada'},
+  {nombre:'Gilberto Naranjo Vega', tel:'+506 8822 5560', motivo:'Cobro de una deuda de ₡4.500.000', area:'civil', dias:5, canal:'Llamada', estado:'cita agendada'},
+  {nombre:'Xinia Cordero Masís', tel:'+506 7044 3288', motivo:'Medida de protección por violencia doméstica', area:'familia', dias:6, canal:'WhatsApp', estado:'cita agendada'},
+  {nombre:'Fabián Chaves Leitón', tel:'+506 8611 0042', motivo:'Consulta por accidente de tránsito, sin lesiones', area:'civil', dias:8, canal:'Llamada', estado:'descartado'},
+  {nombre:'Ivannia Segura Badilla', tel:'+506 8500 9917', motivo:'Consulta sobre sueldos atrasados, ya resuelto con el patrono', area:'laboral', dias:10, canal:'WhatsApp', estado:'descartado'}
+].map((c, i) => Object.assign(c, {id:'q' + (i + 1), fecha: iso(addDays(TODAY, -c.dias)), notas:''}));
+
+/* --- facturación (3 meses) --- */
+const FACTURAS = [];
+let _facId = 0;
+const CONCEPTOS = [
+  ['Honorarios de consulta inicial', 45000, 45000],
+  ['Honorarios por redacción de demanda', 250000, 300000],
+  ['Honorarios de representación en audiencia', 180000, 260000],
+  ['Escritura de compraventa', 320000, 580000],
+  ['Poder especial notarial', 65000, 95000],
+  ['Honorarios por trámite de pensión alimentaria', 150000, 220000],
+  ['Revisión y confección de contrato', 120000, 180000],
+  ['Honorarios de cobro administrativo', 200000, 350000],
+  ['Asesoría mensual a empresa', 250000, 250000],
+  ['Protocolización de documentos', 90000, 140000],
+  ['Honorarios por divorcio de mutuo consentimiento', 280000, 380000],
+  ['Inscripción y trámites registrales', 75000, 110000]
+];
+(function buildFacturas(){
+  const y = TODAY.getFullYear();
+  for(let back = 2; back >= 0; back--){
+    const mdate = new Date(y, TODAY.getMonth() - back, 1);
+    const mm = mdate.getMonth() + 1, yy = mdate.getFullYear();
+    const n = 16;
+    for(let i = 0; i < n; i++){
+      const c = pick(CLIENTS);
+      const con = pick(CONCEPTOS);
+      const base = Math.round(intBetween(con[1], con[2]) / 1000) * 1000;
+      const day = back === 0 ? intBetween(1, TODAY.getDate()) : intBetween(1, 27);
+      const fecha = new Date(yy, mm - 1, Math.min(day, 28));
+      const pagada = back > 0 ? rnd() > 0.07 : (fecha < TODAY ? rnd() > 0.32 : false);
+      const expd = EXPEDIENTS.filter(e => e.clienteId === c.id);
+      FACTURAS.push({
+        id: 'f' + (++_facId),
+        num: 'F-' + yy + '-' + pad(++_facId + 300),
+        fecha: iso(fecha),
+        mes: yy + '-' + pad(mm),
+        clienteId: c.id,
+        expedienteId: expd.length ? pick(expd).id : null,
+        abogadoId: pick(LAWYERS).id,
+        concepto: con[0],
+        monto: base,
+        estado: pagada ? 'pagado' : 'pendiente',
+        medio: pick(['Transferencia','Efectivo','Tarjeta','SINPE Móvil'])
+      });
+    }
+  }
+})();
+const facturasDeMes = mes => FACTURAS.filter(f => f.mes === mes);
+
+/* --- historial de comunicaciones por cliente --- */
+const COMS = [];
+(function buildComs(){
+  const TEXTS = {
+    WhatsApp: ['Se confirmó la cita por WhatsApp.','Se envió el resumen de la reunión y la lista de documentos.','Se recordó la audiencia del día siguiente.'],
+    Llamada: ['Llamada de seguimiento: el cliente aportará la prueba la próxima semana.','Se informó el estado del expediente por teléfono.'],
+    Correo: ['Se remitió el borrador del escrito para revisión.','Se envió la factura del mes y el detalle de honorarios.'],
+    Reunión: ['Reunión en el bufete para revisar la estrategia del caso.','Firma de documentos en oficina.']
+  };
+  CLIENTS.forEach(c => {
+    const n = intBetween(2, 4);
+    for(let i = 0; i < n; i++){
+      const canal = pick(CANALES);
+      COMS.push({
+        clienteId: c.id,
+        fecha: iso(addDays(TODAY, -intBetween(2, 150))),
+        canal: canal,
+        texto: pick(TEXTS[canal])
+      });
+    }
+  });
+  COMS.sort((a, b) => b.fecha.localeCompare(a.fecha));
+})();
+
+/* --- series para informes --- */
+const CONSULTAS_MES = (() => {
+  const out = [];
+  for(let i = 5; i >= 0; i--){
+    const d = new Date(TODAY.getFullYear(), TODAY.getMonth() - i, 1);
+    out.push({mes: d.getMonth(), label: MSHORT[d.getMonth()], n: [18, 22, 17, 26, 24, 29][5 - i]});
+  }
+  return out;
+})();
+const FACTURACION_MES = (() => {
+  const out = [];
+  for(let i = 5; i >= 0; i--){
+    const d = new Date(TODAY.getFullYear(), TODAY.getMonth() - i, 1);
+    out.push({label: MSHORT[d.getMonth()], n: [4820000, 5310000, 4950000, 6120000, 5780000, 6040000][5 - i]});
+  }
+  return out;
+})();
+
+/* --- ajustes --- */
+const SETTINGS = {
+  bufete: 'Bufete del Lic. Oscar Felipe Baltodano Valverde',
+  direccion: 'San José, Costa Rica',
+  whatsapp: '+506 8631 0255',
+  correo: 'recepcion@baltodanovalverde.cr',
+  recordatorio24: true,
+  recordatorio2: true,
+  recordatorioWhatsApp: true,
+  confirmacionAuto: false,
+  horarios: [
+    {d:'Lunes', on:true, a:'08:00', b:'18:00'},
+    {d:'Martes', on:true, a:'08:00', b:'18:00'},
+    {d:'Miércoles', on:true, a:'08:00', b:'18:00'},
+    {d:'Jueves', on:true, a:'08:00', b:'18:00'},
+    {d:'Viernes', on:true, a:'08:00', b:'17:00'},
+    {d:'Sábado', on:true, a:'08:00', b:'12:00'},
+    {d:'Domingo', on:true, a:'09:00', b:'17:00'}
+  ]
+};
+/* ============================================================
+   Vistas del panel
+   ============================================================ */
+const state = {
+  sec: 'escritorio',
+  expId: null,
+  cliId: null,
+  navOpen: false,
+  collapsed: false,
+  agenda: {mode:'dia', date: iso(TODAY), abogado:'all'},
+  consultaFiltro: 'todas',
+  expQ: '',
+  expEstado: 'todos',
+  cliQ: '',
+  factMes: TODAY.getFullYear() + '-' + pad(TODAY.getMonth() + 1),
+  factEstado: 'todos',
+  consultaId: null
+};
+
+const SECTIONS = [
+  {id:'escritorio', label:'Escritorio', icon:'home'},
+  {id:'agenda', label:'Agenda', icon:'calendar'},
+  {id:'consultas', label:'Consultas', icon:'chat'},
+  {id:'expedientes', label:'Expedientes', icon:'folder'},
+  {id:'clientes', label:'Clientes', icon:'users'},
+  {id:'facturacion', label:'Facturación', icon:'receipt'},
+  {id:'informes', label:'Informes', icon:'chart'},
+  {id:'ajustes', label:'Ajustes', icon:'gear'}
+];
+const TITLES = {
+  escritorio:'Escritorio', agenda:'Agenda', consultas:'Consultas', expedientes:'Expedientes',
+  clientes:'Clientes', facturacion:'Facturación', informes:'Informes', ajustes:'Ajustes',
+  expediente:'Expediente', cliente:'Ficha del cliente'
+};
+
+const ST_CITA = {confirmada:['Confirmada','green'], pendiente:['Pendiente','amber'], atendida:['Atendida','gray'], cancelada:['Cancelada','red']};
+const ST_CONS = {nuevo:['Nuevo','blue'], contactado:['Contactado','gold'], 'cita agendada':['Cita agendada','green'], descartado:['Descartado','gray']};
+const ST_EXP = {'en estudio':['En estudio','blue'], 'en trámite':['En trámite','gold'], 'en audiencia':['En audiencia','amber'], cerrado:['Cerrado','gray']};
+const ST_FAC = {pagado:['Pagado','green'], pendiente:['Pendiente','amber']};
+
+function pill(map, key){ const p = map[key] || [key, 'gray']; return '<span class="pill pill-' + p[1] + '">' + p[0] + '</span>'; }
+
+/* --- helpers de datos --- */
+const citasDe = d => CITAS.filter(c => c.date === d).sort((a, b) => a.time.localeCompare(b.time));
+const citasDeHoy = () => citasDe(iso(TODAY));
+const consultasNuevas = () => CONSULTAS.filter(c => c.estado === 'nuevo');
+const pagadoMes = mes => facturasDeMes(mes).filter(f => f.estado === 'pagado').reduce((s, f) => s + f.monto, 0);
+const pendienteMes = mes => facturasDeMes(mes).filter(f => f.estado === 'pendiente').reduce((s, f) => s + f.monto, 0);
+const totalMes = mes => facturasDeMes(mes).reduce((s, f) => s + f.monto, 0);
+const mesActual = () => TODAY.getFullYear() + '-' + pad(TODAY.getMonth() + 1);
+function mesLabel(mes){
+  const p = mes.split('-');
+  return MONTHS[Number(p[1]) - 1] + ' ' + p[0];
+}
+function vencimientosSemana(){
+  const out = [];
+  EXPEDIENTS.forEach(e => e.vencimientos.forEach(v => {
+    const d = daysUntil(v.date);
+    if(d >= 0 && d <= 7) out.push({exp:e, v:v, d:d});
+  }));
+  return out.sort((a, b) => a.v.date.localeCompare(b.v.date));
+}
+function agendaMinutosPorAbogado(){
+  const mes = mesActual();
+  return LAWYERS.map(l => ({
+    l: l,
+    h: CITAS.filter(c => c.abogadoId === l.id && c.date.slice(0, 7) === mes).reduce((s, c) => s + c.dur, 0) / 60
+  }));
+}
+function clienteExpedientes(id){ return EXPEDIENTS.filter(e => e.clienteId === id); }
+function clienteCitas(id){ return CITAS.filter(c => c.clienteId === id).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time)); }
+function clienteComs(id){ return COMS.filter(c => c.clienteId === id); }
+
+/* --- arranque --- */
+function enterApp(){
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('tbDate').textContent = fmtLong(TODAY);
+  document.getElementById('chipToday').textContent = fmtLong(TODAY).replace(' de ' + TODAY.getFullYear(), '');
+  document.getElementById('sideFootMeta').textContent = 'Demo · ' + fmtLong(TODAY);
+  document.getElementById('view').innerHTML = '';
+  go('escritorio');
+}
+function toggleSide(open){
+  state.navOpen = open;
+  document.getElementById('sidebar').classList.toggle('open', open);
+}
+function toggleCollapse(){
+  state.collapsed = !state.collapsed;
+  document.getElementById('app').classList.toggle('collapsed', state.collapsed);
+}
+function toggleUserMenu(e){
+  if(e) e.stopPropagation();
+  const root = document.getElementById('menuRoot');
+  if(root.innerHTML){
+    root.innerHTML = '';
+    return;
+  }
+  root.innerHTML =
+    '<div class="user-menu" onclick="event.stopPropagation()">' +
+      '<div class="um-head"><strong>Lic. Oscar Baltodano</strong><span>Socio director · bufete</span></div>' +
+      '<a href="' + PUBLIC_URL + '" target="_blank" rel="noopener">' + icon('external') + 'Ver la web pública</a>' +
+      '<button onclick="go(\'ajustes\')">' + icon('gear') + 'Ajustes del bufete</button>' +
+      '<hr>' +
+      '<button onclick="logout()">' + icon('logout') + 'Salir del sistema</button>' +
+    '</div>';
+  setTimeout(() => document.addEventListener('click', closeMenuOnce, {once:true}), 0);
+}
+function closeMenuOnce(){ document.getElementById('menuRoot').innerHTML = ''; }
+function logout(){
+  document.getElementById('menuRoot').innerHTML = '';
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('login').classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+
+function renderNav(){
+  const nuevas = consultasNuevas().length;
+  let h = '<div class="side-label">Panel del bufete</div>';
+  SECTIONS.forEach(s => {
+    const active = state.sec === s.id || (s.id === 'expedientes' && state.sec === 'expediente') || (s.id === 'clientes' && state.sec === 'cliente');
+    h += '<button class="nav-item' + (active ? ' active' : '') + '" onclick="go(\'' + s.id + '\')" title="' + s.label + '">' +
+      icon(s.icon) + '<span class="nav-t">' + s.label + '</span>' +
+      (s.id === 'consultas' && nuevas ? '<span class="nav-badge">' + nuevas + '</span>' : '') +
+    '</button>';
+  });
+  document.getElementById('nav').innerHTML = h;
+}
+
+function go(sec){
+  state.sec = sec;
+  if(sec !== 'expediente') state.expId = null;
+  if(sec !== 'cliente') state.cliId = null;
+  toggleSide(false);
+  render();
+  window.scrollTo(0, 0);
+}
+
+function render(){
+  renderNav();
+  const t = document.getElementById('tbTitle');
+  t.textContent = state.sec === 'expediente' && state.expId ? 'Expediente' : state.sec === 'cliente' && state.cliId ? 'Ficha del cliente' : TITLES[state.sec];
+  const v = document.getElementById('view');
+  if(state.sec === 'escritorio') v.innerHTML = viewEscritorio();
+  else if(state.sec === 'agenda') v.innerHTML = viewAgenda();
+  else if(state.sec === 'consultas') v.innerHTML = viewConsultas();
+  else if(state.sec === 'expedientes') v.innerHTML = viewExpedientes();
+  else if(state.sec === 'expediente') v.innerHTML = viewExpediente(state.expId);
+  else if(state.sec === 'clientes') v.innerHTML = viewClientes();
+  else if(state.sec === 'cliente') v.innerHTML = viewCliente(state.cliId);
+  else if(state.sec === 'facturacion') v.innerHTML = viewFacturacion();
+  else if(state.sec === 'informes') v.innerHTML = viewInformes();
+  else if(state.sec === 'ajustes') v.innerHTML = viewAjustes();
+}
+
+/* ============================================================
+   1. ESCRITORIO
+   ============================================================ */
+function viewEscritorio(){
+  const hoy = citasDeHoy();
+  const nuevas = consultasNuevas();
+  const semana = vencimientosSemana();
+  const mes = mesActual();
+  const total = totalMes(mes), pagado = pagadoMes(mes), pendiente = pendienteMes(mes);
+  const prox = hoy.filter(c => c.estado !== 'atendida' && c.estado !== 'cancelada')[0];
+  const expAbiertos = EXPEDIENTS.filter(e => e.estado !== 'cerrado').length;
+
+  let h = '<div class="page-head"><div><h1>Buenos días, licenciado</h1>' +
+    '<div class="sub">' + fmtLong(TODAY) + ' · ' + expAbiertos + ' expedientes activos en el bufete</div></div>' +
+    '<div class="actions"><button class="btn btn-ghost btn-sm" onclick="go(\'informes\')">' + icon('chart','ico-sm') + 'Ver informes</button>' +
+    '<button class="btn btn-primary btn-sm" onclick="openCitaForm()">' + icon('plus','ico-sm') + 'Nueva cita</button></div></div>';
+
+  h += '<div class="grid kpis">' +
+    kpi('calendar', 'Citas de hoy', hoy.length, hoy.filter(c => c.estado === 'confirmada').length + ' confirmadas · ' + (prox ? 'próxima ' + to12(prox.time) : 'sin pendientes'), '') +
+    kpi('chat', 'Consultas sin asignar', nuevas.length, nuevas.length ? 'La más reciente: ' + shortName(nuevas[0].nombre) : 'Bandeja al día', '') +
+    kpi('alert', 'Plazos esta semana', semana.length, semana.length ? 'El más próximo: ' + (semana[0].d === 0 ? 'hoy' : 'en ' + semana[0].d + ' día' + (semana[0].d === 1 ? '' : 's')) : 'Sin vencimientos', '') +
+    kpi('receipt', 'Facturación del mes', fmtCRC(total), 'Cobrado ' + fmtCRC(pagado) + ' · pendiente ' + fmtCRC(pendiente), 'accent') +
+  '</div>';
+
+  // agenda del día + consultas nuevas
+  h += '<div class="dcols">';
+  h += '<div class="card"><div class="card-head"><h3>Agenda de hoy</h3><span class="hint">' + hoy.length + ' citas</span>' +
+    '<div class="actions"><button class="btn btn-ghost btn-sm" onclick="go(\'agenda\')">Ver agenda completa' + icon('arrowRight','ico-sm') + '</button></div></div>';
+  if(!hoy.length){
+    h += '<div class="empty">No hay citas agendadas para hoy.</div>';
+  } else {
+    hoy.forEach(c => {
+      const cl = cli(c.clienteId), tp = tipo(c.tipoId), ab = lawyer(c.abogadoId);
+      h += '<button class="row" onclick="openCitaDetail(\'' + c.id + '\')">' +
+        '<div class="time-box"><div class="h">' + c.time + '</div><div class="ampm">' + c.dur + ' min</div></div>' +
+        '<div class="r-main"><span class="r-t">' + esc(tp.name) + ' · ' + esc(shortName(cl.name)) + '</span>' +
+        '<span class="r-s">' + esc(ab.name) + ' · ' + esc(cl.kind) + '</span></div>' +
+        '<div class="r-end">' + pill(ST_CITA, c.estado) + '</div></button>';
+    });
+  }
+  h += '</div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Consultas nuevas</h3><span class="hint">sin asignar</span>' +
+    '<div class="actions"><button class="btn btn-ghost btn-sm" onclick="go(\'consultas\')">Bandeja' + icon('arrowRight','ico-sm') + '</button></div></div>';
+  if(!nuevas.length){
+    h += '<div class="empty">No quedan consultas sin asignar.</div>';
+  } else {
+    nuevas.slice(0, 6).forEach(q => {
+      h += '<button class="alert-row" onclick="openConsulta(\'' + q.id + '\')">' +
+        '<div class="a-ico a-blue">' + icon('chat','ico-sm') + '</div>' +
+        '<div class="a-main"><span class="a-t">' + esc(q.nombre) + '</span>' +
+        '<span class="a-s">' + esc(q.motivo) + '</span>' +
+        '<span class="a-s">' + esc(areaOf(q.area).name) + ' · ' + fmtDate(q.fecha) + '</span></div>' +
+        icon('chevron','ico-sm') + '</button>';
+    });
+  }
+  h += '</div></div>';
+
+  // plazos + avisos
+  h += '<div class="dcols-3">';
+  h += '<div class="card"><div class="card-head"><h3>Plazos que vencen esta semana</h3><span class="hint">' + semana.length + '</span></div>';
+  if(!semana.length){
+    h += '<div class="empty">No hay plazos en los próximos siete días.</div>';
+  } else {
+    semana.slice(0, 6).forEach(item => {
+      const e = item.exp, d = item.d;
+      h += '<button class="alert-row" onclick="openExpediente(\'' + e.id + '\')">' +
+        '<div class="a-ico ' + (d <= 2 ? 'a-red' : 'a-amber') + '">' + icon('clock','ico-sm') + '</div>' +
+        '<div class="a-main"><span class="a-t">' + esc(item.v.label) + '</span>' +
+        '<span class="a-s">' + esc(shortName(e.caratula)) + ' · ' + esc(lawyer(e.abogadoId).name) + '</span></div>' +
+        '<div class="r-end" style="margin:0; font-size:11.5px; font-weight:700; color:' + (d <= 2 ? 'var(--red)' : 'var(--amber)') + '">' +
+        (d === 0 ? 'hoy' : d === 1 ? 'mañana' : 'en ' + d + ' días') + '</div></button>';
+    });
+  }
+  h += '</div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Avisos del bufete</h3><span class="hint">para revisar</span></div>';
+  const avisos = avisosList();
+  avisos.forEach(a => {
+    h += '<button class="alert-row" onclick="' + a.action + '">' +
+      '<div class="a-ico ' + a.tone + '">' + icon(a.icon,'ico-sm') + '</div>' +
+      '<div class="a-main"><span class="a-t">' + esc(a.t) + '</span><span class="a-s">' + esc(a.s) + '</span></div>' +
+      icon('chevron','ico-sm') + '</button>';
+  });
+  h += '</div></div>';
+
+  // honorarios por abogado del mes
+  h += '<div class="card" style="margin-top:15px"><div class="card-head"><h3>Honorarios del mes por abogado</h3><span class="hint">' + mesLabel(mes) + ' · montos en colones costarricenses</span></div>' +
+    '<div class="table-wrap"><table class="t"><thead><tr><th>Abogado</th><th>Facturas</th><th class="num">Facturado</th><th class="num">Cobrado</th><th class="num">Pendiente</th></tr></thead><tbody>';
+  LAWYERS.forEach(l => {
+    const fs = facturasDeMes(mes).filter(f => f.abogadoId === l.id);
+    const tot = fs.reduce((s, f) => s + f.monto, 0);
+    const pag = fs.filter(f => f.estado === 'pagado').reduce((s, f) => s + f.monto, 0);
+    h += '<tr><td><div class="t-name">' + avatar(l.name, 'nv') + esc(l.full.replace('Lic. ', '')) + '</div></td>' +
+      '<td class="mini">' + fs.length + '</td><td class="num">' + fmtCRC(tot) + '</td><td class="num" style="color:var(--green)">' + fmtCRC(pag) + '</td>' +
+      '<td class="num" style="color:var(--amber)">' + fmtCRC(tot - pag) + '</td></tr>';
+  });
+  h += '</tbody></table></div></div>';
+  return h;
+}
+function kpi(ic, label, val, sub, extra){
+  return '<div class="card kpi ' + (extra || '') + '"><div class="k-top"><div class="k-ico">' + icon(ic) + '</div><span class="k-lbl">' + label + '</span></div>' +
+    '<div class="k-val">' + val + '</div><div class="k-sub">' + sub + '</div></div>';
+}
+function avatar(name, cls){
+  return '<span class="avatar ' + (cls || '') + '">' + initials(name) + '</span>';
+}
+function avisosList(){
+  const out = [];
+  const sinConfirmar = CITAS.filter(c => c.date >= iso(TODAY) && c.estado === 'pendiente').length;
+  if(sinConfirmar) out.push({icon:'bell', tone:'a-amber', t:sinConfirmar + ' citas sin confirmar', s:'Conviene llamar o escribir el día anterior.', action:"go('agenda')"});
+  const vencidas = facturasDeMes(mesActual()).filter(f => f.estado === 'pendiente' && f.fecha < iso(addDays(TODAY, -15)));
+  if(vencidas.length) out.push({icon:'receipt', tone:'a-red', t:vencidas.length + ' facturas con más de 15 días', s:'Total pendiente ' + fmtCRC(vencidas.reduce((s, f) => s + f.monto, 0)) + '.', action:"go('facturacion')"});
+  const sinActuacion = EXPEDIENTS.filter(e => e.estado !== 'cerrado' && e.bitacora[0] && daysUntil(e.bitacora[0].date) < -45);
+  if(sinActuacion.length) out.push({icon:'file', tone:'a-gold', t:sinActuacion.length + ' expedientes sin actuación reciente', s:'Revisar si corresponde impulsar el proceso.', action:"go('expedientes')"});
+  out.push({icon:'chat', tone:'a-blue', t:consultasNuevas().length + ' consultas esperan respuesta', s:'Bandeja de entrada del sitio web y WhatsApp.', action:"go('consultas')"});
+  return out;
+}
+
+/* ============================================================
+   2. AGENDA
+   ============================================================ */
+function viewAgenda(){
+  const a = state.agenda;
+  const abFiltro = a.abogado;
+  const abogados = abFiltro === 'all' ? LAWYERS : LAWYERS.filter(l => l.id === abFiltro);
+  const d = parseISO(a.date);
+  let h = '<div class="page-head"><div><h1>Agenda</h1><div class="sub">Citas por abogado, con la duración real de cada diligencia</div></div>' +
+    '<div class="actions"><button class="btn btn-primary btn-sm" onclick="openCitaForm()">' + icon('plus','ico-sm') + 'Nueva cita</button></div></div>';
+
+  h += '<div class="agenda-bar">' +
+    '<div class="seg"><button class="' + (a.mode === 'dia' ? 'on' : '') + '" onclick="setAgendaMode(\'dia\')">Día</button>' +
+    '<button class="' + (a.mode === 'semana' ? 'on' : '') + '" onclick="setAgendaMode(\'semana\')">Semana</button></div>' +
+    '<div class="date-nav"><button onclick="agendaStep(-1)" aria-label="Anterior">' + icon('arrowLeft','ico-sm') + '</button>' +
+    '<span class="cur">' + (a.mode === 'dia' ? fmtLong(d) : 'Semana del ' + fmtShort(startOfWeek(d))) + '</span>' +
+    '<button onclick="agendaStep(1)" aria-label="Siguiente">' + icon('arrowRight','ico-sm') + '</button></div>' +
+    '<button class="btn btn-ghost btn-sm" onclick="agendaToday()">Hoy</button>' +
+    '<select class="select" style="max-width:210px; padding:7px 30px 7px 10px; font-size:12.5px" onchange="setAgendaAbogado(this.value)">' +
+      '<option value="all"' + (abFiltro === 'all' ? ' selected' : '') + '>Todos los abogados</option>' +
+      LAWYERS.map(l => '<option value="' + l.id + '"' + (abFiltro === l.id ? ' selected' : '') + '>' + esc(l.name) + '</option>').join('') +
+    '</select>' +
+    '<span style="margin-left:auto; font-size:12px; color:var(--muted)">' + citasDe(a.date).filter(c => abFiltro === 'all' || c.abogadoId === abFiltro).length + ' citas</span>' +
+  '</div>';
+
+  if(a.mode === 'dia'){
+    h += '<div class="only-desktop">' + dayGantt(a.date, abogados) + '</div>';
+    h += '<div class="only-mobile">' + dayMobile(a.date, abogados) + '</div>';
+    h += '<div class="legend">' + Object.keys(ST_CITA).map(k => '<span><i class="dot" style="background:' + stColor(k) + '"></i>' + ST_CITA[k][0] + '</span>').join('') +
+      '<span style="margin-left:auto">Haga clic en una cita para ver el detalle completo</span></div>';
+    h += '<div class="only-desktop">' + dayList(a.date, abogados) + '</div>';
+  } else {
+    h += weekGrid(a.date, abogados);
+    h += '<div class="legend">' + Object.keys(ST_CITA).map(k => '<span><i class="dot" style="background:' + stColor(k) + '"></i>' + ST_CITA[k][0] + '</span>').join('') + '</div>';
+  }
+  return h;
+}
+function blockName(c){
+  if(c.kind === 'Persona jurídica') return c.name.split(' ')[0];
+  return c.name.split(' ')[0];
+}
+function stColor(k){ return {confirmada:'#B08A3E', pendiente:'#D2A442', atendida:'#79A48F', cancelada:'#C08A90'}[k]; }
+function setAgendaMode(m){ state.agenda.mode = m; render(); }
+function setAgendaAbogado(id){ state.agenda.abogado = id; render(); }
+function agendaStep(n){
+  const d = parseISO(state.agenda.date);
+  state.agenda.date = iso(addDays(d, state.agenda.mode === 'dia' ? n : n * 7));
+  render();
+}
+function agendaToday(){ state.agenda.date = iso(TODAY); render(); }
+
+function dayGantt(dateISO, abogados){
+  let h = '<div class="gantt-scroll"><div class="gantt"><div class="gantt-head"><div class="gantt-lbl-w"></div><div class="gantt-scale">';
+  for(let hr = DAY_START; hr <= DAY_END; hr++){
+    const left = ((hr - DAY_START) * 60 / SPAN) * 100;
+    h += '<span class="hs" style="left:' + left + '%">' + (hr > 12 ? hr - 12 : hr) + (hr >= 12 ? ' p.m.' : ' a.m.') + '</span>';
+  }
+  h += '</div></div>';
+  abogados.forEach(l => {
+    const citas = citasDe(dateISO).filter(c => c.abogadoId === l.id);
+    h += '<div class="gantt-lane"><div class="lane-lbl">' + esc(l.name) + '<span class="role">' + esc(l.role) + '</span></div>' +
+      '<div class="lane-track"><div class="lane-grid">';
+    for(let hr = DAY_START + 1; hr < DAY_END; hr++){
+      h += '<span class="gl" style="left:' + (((hr - DAY_START) * 60 / SPAN) * 100) + '%"></span>';
+    }
+    if(dateISO === iso(TODAY)){
+      const nm = new Date().getHours() * 60 + new Date().getMinutes();
+      if(nm > DAY_START * 60 && nm < DAY_END * 60){
+        h += '<span style="position:absolute; top:0; bottom:0; width:2px; background:#A63A44; z-index:3; pointer-events:none; left:' + ((nm - DAY_START * 60) / SPAN * 100) + '%"></span>';
+      }
+    }
+    h += '</div>';
+    if(!citas.length) h += '<div class="gantt-empty">Sin citas este día</div>';
+    citas.forEach(c => {
+      const start = minutes(c.time) - DAY_START * 60;
+      const left = Math.max(0, start / SPAN * 100);
+      const width = Math.min(100 - left, c.dur / SPAN * 100);
+      const cl = cli(c.clienteId), tp = tipo(c.tipoId);
+      const tiny = c.dur < 45;
+      h += '<button class="gbar st-' + c.estado + (tiny ? ' tiny' : '') + '" style="left:calc(' + left + '% + 2px); width:calc(' + width + '% - 4px)" ' +
+        'onclick="openCitaDetail(\'' + c.id + '\')" title="' + esc(tp.name + ' · ' + cl.name + ' · ' + c.time) + '">' +
+        '<span class="gt">' + c.time + '</span>' +
+        '<span class="gn">' + esc(blockName(cl)) + '</span></button>';
+    });
+    h += '</div></div>';
+  });
+  h += '</div></div>';
+  return h;
+}
+
+function dayMobile(dateISO, abogados){
+  let h = '<div class="card">';
+  const citas = citasDe(dateISO);
+  if(!citas.length) h += '<div class="empty">No hay citas para este día.</div>';
+  abogados.forEach(l => {
+    const propias = citas.filter(c => c.abogadoId === l.id);
+    if(!propias.length) return;
+    h += '<div class="ag-lawyer"><div class="ag-lawyer-h"><span class="dot" style="background:' + l.color + '"></span>' +
+      '<span class="n">' + esc(l.name) + '</span><span class="c">' + propias.length + (propias.length === 1 ? ' cita' : ' citas') + '</span></div>';
+    propias.forEach(c => {
+      const cl = cli(c.clienteId), tp = tipo(c.tipoId);
+      h += '<button class="ag-slot" onclick="openCitaDetail(\'' + c.id + '\')">' +
+        '<div class="t">' + c.time + '<span>' + c.dur + ' min</span></div>' +
+        '<div class="m"><b>' + esc(shortName(cl.name)) + '</b><i>' + esc(tp.name) + '</i></div>' +
+        pill(ST_CITA, c.estado) + '</button>';
+    });
+    h += '</div>';
+  });
+  h += '</div>';
+  return h;
+}
+
+function dayList(dateISO, abogados){
+  const citas = citasDe(dateISO).filter(c => abogados.some(l => l.id === c.abogadoId));
+  let h = '<div class="card" style="margin-top:14px"><div class="card-head"><h3>Citas del día</h3><span class="hint">' + citas.length + ' · ordenadas por hora</span></div>';
+  if(!citas.length) h += '<div class="empty">No hay citas para este día.</div>';
+  citas.forEach(c => {
+    const cl = cli(c.clienteId), tp = tipo(c.tipoId);
+    h += '<button class="row" onclick="openCitaDetail(\'' + c.id + '\')">' +
+      '<div class="time-box"><div class="h">' + c.time + '</div><div class="ampm">' + c.dur + ' min</div></div>' +
+      '<div class="r-main"><span class="r-t">' + esc(tp.name) + ' · ' + esc(shortName(cl.name)) + '</span>' +
+      '<span class="r-s">' + esc(lawyer(c.abogadoId).name) + ' · ' + esc(areaOf(tp.area).name) + ' · ' + to12(c.time) + '</span></div>' +
+      '<div class="r-end">' + pill(ST_CITA, c.estado) + '</div></button>';
+  });
+  h += '</div>';
+  return h;
+}
+
+function weekGrid(dateISO, abogados){
+  const start = startOfWeek(parseISO(dateISO));
+  let h = '<div class="week-scroll"><div class="week-wrap">';
+  for(let i = 0; i < 7; i++){
+    const d = addDays(start, i), ds = iso(d);
+    const citas = citasDe(ds).filter(c => abogados.some(l => l.id === c.abogadoId));
+    const isToday = ds === iso(TODAY);
+    h += '<div class="week-col' + (isToday ? ' today' : '') + '"><div class="week-col-h"><div class="wd">' + DAYS_SHORT[d.getDay()] + '</div>' +
+      '<div class="wn">' + d.getDate() + '</div></div><div class="week-body">';
+    // reparto en carriles para citas simultáneas de distintos abogados
+    const lanes = [];
+    const layout = citas.map(c => {
+      const ini = minutes(c.time), fin = ini + c.dur;
+      let li = lanes.findIndex(end => end <= ini);
+      if(li === -1){ lanes.push(fin); li = lanes.length - 1; }
+      else lanes[li] = fin;
+      return {c: c, lane: li};
+    });
+    const nLanes = Math.max(1, lanes.length);
+    layout.forEach(item => {
+      const c = item.c;
+      const top = (minutes(c.time) - DAY_START * 60) / SPAN * 100;
+      const height = c.dur / SPAN * 100;
+      const cl = cli(c.clienteId), tp = tipo(c.tipoId);
+      const tiny = c.dur < 45;
+      const w = 100 / nLanes;
+      h += '<button class="wblock st-' + c.estado + (tiny ? ' tiny' : '') + '" style="top:' + top + '%; height:' + Math.max(3, height - 0.6) + '%; left:calc(' + (item.lane * w) + '% + 2px); right:auto; width:calc(' + w + '% - 5px)" ' +
+        'onclick="openCitaDetail(\'' + c.id + '\')" title="' + esc(c.time + ' · ' + tp.name + ' · ' + cl.name + ' · ' + lawyer(c.abogadoId).name) + '">' +
+        '<span class="wt">' + c.time + '</span><span class="wn2">' + esc(shortName(cl.name)) + '</span>' +
+        '<span class="ws">' + esc(abogados.length > 1 ? lawyer(c.abogadoId).name : tp.name) + '</span></button>';
+    });
+    h += '</div></div>';
+  }
+  h += '</div></div>';
+  return h;
+}
+
+/* ---------- modales de cita ---------- */
+function openCitaDetail(id){
+  const c = CITAS.find(x => x.id === id);
+  if(!c) return;
+  const cl = cli(c.clienteId), tp = tipo(c.tipoId), ab = lawyer(c.abogadoId);
+  const d = parseISO(c.date);
+  const body =
+    '<div class="detail-rows">' +
+      row('Cliente', '<a class="link-btn" onclick="closeModal();openCliente(\'' + cl.id + '\')">' + esc(cl.name) + '</a>') +
+      row('Tipo de cita', esc(tp.name)) +
+      row('Fecha', fmtLong(d)) +
+      row('Hora', to12(c.time) + ' · ' + c.dur + ' minutos') +
+      row('Abogado', esc(ab.full)) +
+      row('Estado', pill(ST_CITA, c.estado)) +
+      (c.nota ? row('Nota', esc(c.nota)) : '') +
+    '</div>' +
+    '<div class="preview-wrap" style="border-radius:9px; border:1px solid var(--line)">' +
+      '<div class="preview-lbl">Recordatorio que se enviaría</div>' +
+      '<div class="preview-msg">Estimado(a) ' + esc(shortName(cl.name)) + ', le recordamos su cita en el bufete el ' + fmtDate(c.date) + ' a las ' + to12(c.time) + ' con ' + esc(ab.name) + '. Cualquier cambio, responda por WhatsApp al +506 8631 0255.</div>' +
+    '</div>' +
+    '<p style="font-size:11px; color:var(--muted); margin-top:10px">Demostración: el recordatorio no se envía.</p>';
+  const footer =
+    (c.estado !== 'atendida' ? '<button class="btn btn-ghost btn-sm" onclick="setCitaEstado(\'' + c.id + '\',\'atendida\')">Marcar atendida</button>' : '') +
+    (c.estado !== 'confirmada' && c.estado !== 'atendida' ? '<button class="btn btn-soft btn-sm" onclick="setCitaEstado(\'' + c.id + '\',\'confirmada\')">Confirmar</button>' : '') +
+    (c.estado !== 'cancelada' ? '<button class="btn btn-ghost btn-sm" onclick="setCitaEstado(\'' + c.id + '\',\'cancelada\')">Cancelar cita</button>' : '') +
+    '<button class="btn btn-primary btn-sm" onclick="closeModal()">Cerrar</button>';
+  openModal('<div class="modal-h"><div><h3>' + esc(tp.name) + '</h3><div class="sub">' + fmtLong(d) + ' · ' + to12(c.time) + '</div></div>' +
+    '<button class="modal-x" onclick="closeModal()" aria-label="Cerrar">' + icon('x') + '</button></div>' +
+    '<div class="modal-b">' + body + '</div><div class="modal-f">' + footer + '</div>');
+}
+function row(k, v){ return '<div class="dr"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>'; }
+
+function setCitaEstado(id, st){
+  const c = CITAS.find(x => x.id === id);
+  if(!c) return;
+  c.estado = st;
+  closeModal();
+  render();
+  showToast('Cita marcada como ' + ST_CITA[st][0].toLowerCase() + '.');
+}
+
+function openCitaForm(pre){
+  pre = pre || {};
+  const cons = pre.consultaId ? CONSULTAS.find(q => q.id === pre.consultaId) : null;
+  const fecha = pre.date || state.agenda.date || iso(TODAY);
+  const ab = pre.abogadoId || (state.agenda.abogado !== 'all' ? state.agenda.abogado : LAWYERS[0].id);
+  const opcionesTipo = TIPOS.map(t => '<option value="' + t.id + '"' + (cons && t.area === cons.area ? ' selected' : '') + '>' + esc(t.name) + ' · ' + t.dur + ' min</option>').join('');
+  const opcionesCli = CLIENTES_SEL(cons);
+  const body =
+    '<div class="form-grid">' +
+      '<div class="full"><label class="mini" style="font-weight:600">Abogado</label>' +
+        '<select class="select" id="cf-ab">' + LAWYERS.map(l => '<option value="' + l.id + '"' + (l.id === ab ? ' selected' : '') + '>' + esc(l.full) + '</option>').join('') + '</select></div>' +
+      '<div><label class="mini" style="font-weight:600">Fecha</label><input class="input" type="date" id="cf-fecha" value="' + fecha + '"></div>' +
+      '<div><label class="mini" style="font-weight:600">Hora</label><input class="input" type="time" id="cf-hora" step="900" value="' + (pre.time || '09:00') + '"></div>' +
+      '<div class="full"><label class="mini" style="font-weight:600">Tipo de cita y duración</label>' +
+        '<select class="select" id="cf-tipo" onchange="citaDurHint()">' + opcionesTipo + '</select>' +
+        '<div class="mini" id="cf-dur" style="margin-top:5px"></div></div>' +
+      '<div class="full"><label class="mini" style="font-weight:600">Cliente</label>' +
+        '<select class="select" id="cf-cli">' + opcionesCli + '</select></div>' +
+      (cons ? '<div class="full note">Consulta de <b>' + esc(cons.nombre) + '</b> · ' + esc(cons.tel) + '<br>Al guardar se crea la ficha del cliente y la consulta pasa a «Cita agendada».</div>' : '') +
+      '<div class="full"><label class="mini" style="font-weight:600">Nota para el expediente (opcional)</label>' +
+        '<input class="input" type="text" id="cf-nota" placeholder="Ej.: trae copia de la escritura"></div>' +
+    '</div>';
+  openModal('<div class="modal-h"><div><h3>Nueva cita</h3><div class="sub">La agenda controla el cruce de horarios por abogado</div></div>' +
+    '<button class="modal-x" onclick="closeModal()" aria-label="Cerrar">' + icon('x') + '</button></div>' +
+    '<div class="modal-b">' + body + '</div>' +
+    '<div class="modal-f"><button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>' +
+    '<button class="btn btn-primary" onclick="saveCita(' + (cons ? "'" + cons.id + "'" : 'null') + ')">' + icon('check','ico-sm') + 'Agendar</button></div>');
+  window._citaPre = {consultaId: cons ? cons.id : null};
+  citaDurHint();
+}
+function CLIENTES_SEL(cons){
+  let h = '';
+  if(cons) h += '<option value="__nuevo">Nuevo cliente: ' + esc(cons.nombre) + '</option>';
+  h += CLIENTS.slice().sort((a, b) => a.name.localeCompare(b.name)).map(c => '<option value="' + c.id + '">' + esc(c.name) + ' · ' + esc(c.doc) + '</option>').join('');
+  return h;
+}
+function citaDurHint(){
+  const t = tipo(document.getElementById('cf-tipo').value);
+  document.getElementById('cf-dur').textContent = 'Duración: ' + t.dur + ' minutos · ' + esc(areaOf(t.area).name);
+}
+function saveCita(consultaId){
+  const ab = document.getElementById('cf-ab').value;
+  const fecha = document.getElementById('cf-fecha').value;
+  const hora = document.getElementById('cf-hora').value;
+  const tipoId = document.getElementById('cf-tipo').value;
+  const cliId = document.getElementById('cf-cli').value;
+  const nota = document.getElementById('cf-nota').value.trim();
+  if(!fecha || !hora){ showToast('Indique la fecha y la hora de la cita.', true); return; }
+  const tp = tipo(tipoId);
+  const dur = tp.dur;
+  const choque = citaConflictos(ab, fecha, hora, dur);
+  if(choque.length){
+    const c0 = choque[0];
+    showToast('Se cruza con «' + tipo(c0.tipoId).name + '» de ' + lawyer(ab).name + ' a las ' + to12(c0.time), true);
+    return;
+  }
+  let clienteId = cliId, nuevo = null;
+  if(cliId === '__nuevo' && consultaId){
+    const q = CONSULTAS.find(x => x.id === consultaId);
+    nuevo = {
+      id: 'c' + (CLIENTS.length + 1),
+      name: q.nombre, kind: q.motivo ? 'Persona física' : 'Persona física',
+      doc: '—', phone: q.tel, email: '', prov: 'San José', cant: 'San José',
+      since: iso(TODAY), ref: 'Consulta del sitio web'
+    };
+    CLIENTS.push(nuevo);
+    clienteId = nuevo.id;
+    q.estado = 'cita agendada';
+    q.clienteId = nuevo.id;
+  }
+  const c = addCita({date:fecha, time:hora, dur:dur, tipoId:tipoId, abogadoId:ab, clienteId:clienteId, estado:'pendiente', nota:nota,
+    consultaId: consultaId || null});
+  closeModal();
+  state.agenda.date = fecha;
+  if(state.sec !== 'agenda') state.sec = 'agenda';
+  render();
+  showToast('Cita agendada para ' + fmtDate(fecha) + ' a las ' + to12(hora) + (nuevo ? ' · cliente creado' : '') + '.');
+}
+
+/* ============================================================
+   3. CONSULTAS
+   ============================================================ */
+function viewConsultas(){
+  const f = state.consultaFiltro;
+  const counts = {
+    todas: CONSULTAS.length,
+    nuevo: CONSULTAS.filter(q => q.estado === 'nuevo').length,
+    contactado: CONSULTAS.filter(q => q.estado === 'contactado').length,
+    'cita agendada': CONSULTAS.filter(q => q.estado === 'cita agendada').length,
+    descartado: CONSULTAS.filter(q => q.estado === 'descartado').length
+  };
+  const list = CONSULTAS.filter(q => f === 'todas' || q.estado === f).slice().sort((a, b) => b.fecha.localeCompare(a.fecha));
+  let h = '<div class="page-head"><div><h1>Consultas</h1><div class="sub">Bandeja de entrada del sitio web, WhatsApp y llamadas</div></div>' +
+    '<div class="actions"><button class="btn btn-ghost btn-sm" onclick="go(\'agenda\')">' + icon('calendar','ico-sm') + 'Ir a la agenda</button></div></div>';
+
+  h += '<div class="sum-strip">' +
+    ss('Nuevas', counts.nuevo, '#2F6493', 'nuevo') +
+    ss('Contactadas', counts.contactado, '#B08A3E', 'contactado') +
+    ss('Con cita', counts['cita agendada'], '#2C7A5B', 'cita agendada') +
+    ss('Descartadas', counts.descartado, '#93A1B3', 'descartado') +
+  '</div>';
+
+  h += '<div class="card"><div class="card-head" style="gap:8px">' +
+    '<div class="seg">' + [['todas','Todas'],['nuevo','Nuevas'],['contactado','Contactadas'],['cita agendada','Con cita'],['descartado','Descartadas']].map(x =>
+      '<button class="' + (f === x[0] ? 'on' : '') + '" onclick="setConsultaFiltro(\'' + x[0] + '\')" style="font-size:11.5px; padding:5px 10px">' + x[1] + '</button>').join('') + '</div>' +
+    '<span class="hint" style="margin-left:auto">' + list.length + ' consultas</span></div>';
+  if(!list.length){
+    h += '<div class="empty">No hay consultas en este estado.</div>';
+  }
+  list.forEach(q => {
+    const bar = {nuevo:'#2F6493', contactado:'#B08A3E', 'cita agendada':'#2C7A5B', descartado:'#C3CDD8'}[q.estado];
+    h += '<button class="cons-item" onclick="openConsulta(\'' + q.id + '\')">' +
+      '<span style="width:3px; align-self:stretch; border-radius:2px; background:' + bar + '; flex:0 0 3px"></span>' +
+      '<div class="c-main"><div class="c-top"><span class="c-n">' + esc(q.nombre) + '</span><span class="c-t">' + fmtDate(q.fecha) + '</span></div>' +
+      '<span class="c-p">' + esc(q.motivo) + '</span>' +
+      '<span class="c-area">' + esc(areaOf(q.area).name) + '</span>' +
+      '<span class="mini" style="margin-left:8px">' + esc(q.canal) + ' · ' + esc(q.tel) + '</span></div>' +
+      '<div style="flex:0 0 auto">' + pill(ST_CONS, q.estado) + '</div></button>';
+  });
+  h += '</div>';
+  return h;
+}
+function ss(label, n, color, filtro){
+  return '<button class="ss" onclick="setConsultaFiltro(\'' + filtro + '\')"><span class="d" style="background:' + color + '"></span>' +
+    '<span><span class="n">' + n + '</span><br><span class="l">' + label + '</span></span></button>';
+}
+function setConsultaFiltro(f){ state.consultaFiltro = f; render(); }
+
+function openConsulta(id){
+  const q = CONSULTAS.find(x => x.id === id);
+  if(!q) return;
+  const body =
+    '<div class="detail-rows">' +
+      row('Nombre', esc(q.nombre)) +
+      row('Teléfono', '<a class="link-btn" href="#">' + esc(q.tel) + '</a>') +
+      row('Motivo', esc(q.motivo)) +
+      row('Área', esc(areaOf(q.area).name)) +
+      row('Recibida', fmtDate(q.fecha) + ' · ' + esc(q.canal)) +
+      row('Estado', pill(ST_CONS, q.estado)) +
+    '</div>' +
+    '<label class="mini" style="font-weight:600">Nota de seguimiento</label>' +
+    '<textarea class="input" id="q-nota" rows="3" placeholder="Ej.: se llamó, pide cita la próxima semana">' + esc(q.notas || '') + '</textarea>' +
+    '<p style="font-size:11px; color:var(--muted); margin-top:9px">Demostración: no se envía WhatsApp, correo ni llamada.</p>';
+  const canCita = q.estado !== 'cita agendada' && q.estado !== 'descartado';
+  const footer =
+    '<button class="btn btn-ghost btn-sm" onclick="setConsultaEstado(\'' + q.id + '\',\'descartado\')">Descartar</button>' +
+    (q.estado === 'nuevo' ? '<button class="btn btn-ghost btn-sm" onclick="setConsultaEstado(\'' + q.id + '\',\'contactado\')">Marcar contactado</button>' : '') +
+    (canCita ? '<button class="btn btn-primary btn-sm" onclick="closeModal();openCitaForm({consultaId:\'' + q.id + '\'})">' + icon('calendar','ico-sm') + 'Convertir en cita</button>' : '') +
+    '<button class="btn btn-ghost btn-sm" onclick="saveConsultaNota(\'' + q.id + '\')">Guardar nota</button>';
+  openModal('<div class="modal-h"><div><h3>' + esc(q.nombre) + '</h3><div class="sub">Consulta recibida el ' + fmtDate(q.fecha) + ' por ' + esc(q.canal) + '</div></div>' +
+    '<button class="modal-x" onclick="closeModal()" aria-label="Cerrar">' + icon('x') + '</button></div>' +
+    '<div class="modal-b">' + body + '</div><div class="modal-f">' + footer + '</div>');
+}
+function saveConsultaNota(id){
+  const q = CONSULTAS.find(x => x.id === id);
+  const ta = document.getElementById('q-nota');
+  if(q && ta) q.notas = ta.value.trim();
+  closeModal();
+  render();
+  showToast('Nota guardada en la consulta.');
+}
+function setConsultaEstado(id, st){
+  const q = CONSULTAS.find(x => x.id === id);
+  if(!q) return;
+  q.estado = st;
+  closeModal();
+  render();
+  showToast('Consulta marcada como ' + ST_CONS[st][0].toLowerCase() + '.');
+}
+
+/* ============================================================
+   4. EXPEDIENTES
+   ============================================================ */
+function viewExpedientes(){
+  const q = state.expQ.toLowerCase().trim();
+  const list = EXPEDIENTS.filter(e => {
+    const cl = cli(e.clienteId);
+    const okQ = !q || (e.caratula + ' ' + e.num + ' ' + e.materia + ' ' + (cl ? cl.name : '')).toLowerCase().includes(q);
+    const okE = state.expEstado === 'todos' || e.estado === state.expEstado;
+    return okQ && okE;
+  });
+  let h = '<div class="page-head"><div><h1>Expedientes</h1><div class="sub">' + EXPEDIENTS.length + ' casos · ' +
+    EXPEDIENTS.filter(e => e.estado !== 'cerrado').length + ' activos</div></div>' +
+    '<div class="actions"><button class="btn btn-ghost btn-sm" onclick="go(\'clientes\')">' + icon('users','ico-sm') + 'Clientes</button>' +
+    '<button class="btn btn-primary btn-sm" onclick="openCitaForm()">' + icon('plus','ico-sm') + 'Nueva cita</button></div></div>';
+
+  h += '<div class="card"><div class="card-head" style="gap:10px">' +
+    '<div class="search-wrap">' + icon('search','ico-sm') + '<input class="input" id="exp-q" placeholder="Buscar por carátula, cliente o número" value="' + esc(state.expQ) + '" oninput="setExpQ(this.value)"></div>' +
+    '<div class="seg" style="margin-left:auto">' + [['todos','Todos'],['en estudio','En estudio'],['en trámite','En trámite'],['en audiencia','En audiencia'],['cerrado','Cerrados']].map(x =>
+      '<button class="' + (state.expEstado === x[0] ? 'on' : '') + '" onclick="setExpEstado(\'' + x[0] + '\')" style="font-size:11.5px; padding:5px 9px">' + x[1] + '</button>').join('') + '</div>' +
+  '</div>';
+  h += '<div class="table-wrap"><table class="t"><thead><tr><th>Carátula</th><th>Área</th><th>Abogado</th><th>Próximo vencimiento</th><th>Estado</th><th></th></tr></thead><tbody>';
+  if(!list.length){
+    h += '<tr><td colspan="6"><div class="empty">No se encontraron expedientes con ese criterio.</div></td></tr>';
+  }
+  list.slice(0, 60).forEach(e => {
+    const cl = cli(e.clienteId);
+    const prox = e.vencimientos.slice().sort((a, b) => a.date.localeCompare(b.date))[0];
+    const d = prox ? daysUntil(prox.date) : null;
+    h += '<tr style="cursor:pointer" onclick="openExpediente(\'' + e.id + '\')">' +
+      '<td><div style="font-weight:600; max-width:330px; white-space:normal; line-height:1.35">' + esc(e.caratula) + '</div>' +
+        '<div class="mini">' + esc(e.num) + ' · ' + esc(e.materia) + '</div></td>' +
+      '<td><span class="tag" style="color:' + areaOf(e.area).color + '; border-color:' + areaOf(e.area).color + '33; background:' + areaOf(e.area).color + '0F">' + esc(areaOf(e.area).name) + '</span></td>' +
+      '<td class="mini">' + esc(lawyer(e.abogadoId).name) + '<div class="mini" style="font-size:10.5px">Cliente: ' + esc(shortName(cl ? cl.name : '')) + '</div></td>' +
+      '<td class="mini">' + (prox ? fmtDate(prox.date) + (d !== null ? ' <span style="color:' + (d <= 2 ? 'var(--red)' : 'var(--muted)') + '">(' + (d === 0 ? 'hoy' : d + 'd') + ')</span>' : '') : '—') + '</td>' +
+      '<td>' + pill(ST_EXP, e.estado) + '</td>' +
+      '<td style="text-align:right; color:var(--muted-2)">' + icon('chevron','ico-sm') + '</td></tr>';
+  });
+  h += '</tbody></table></div>';
+  if(list.length > 60) h += '<div class="empty">Mostrando 60 de ' + list.length + ' expedientes.</div>';
+  h += '</div>';
+  return h;
+}
+function setExpQ(v){
+  state.expQ = v;
+  const pos = document.getElementById('exp-q');
+  render();
+  const el = document.getElementById('exp-q');
+  if(el){ el.focus(); el.setSelectionRange(pos ? pos.value.length : v.length, pos ? pos.value.length : v.length); }
+}
+function setExpEstado(e){ state.expEstado = e; render(); }
+function openExpediente(id){ state.sec = 'expediente'; state.expId = id; render(); window.scrollTo(0, 0); }
+
+function viewExpediente(id){
+  const e = exp(id);
+  if(!e) return '<div class="empty">Expediente no encontrado.</div>';
+  const cl = cli(e.clienteId), ab = lawyer(e.abogadoId), ar = areaOf(e.area);
+  const vencs = e.vencimientos.slice().sort((a, b) => a.date.localeCompare(b.date));
+  const facs = FACTURAS.filter(f => f.expedienteId === e.id);
+  const citas = CITAS.filter(c => c.clienteId === e.clienteId && c.date >= iso(addDays(TODAY, -20))).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+
+  let h = '<div class="page-head"><div style="display:flex; gap:10px; align-items:flex-start">' +
+    '<button class="btn btn-ghost btn-sm" onclick="go(\'expedientes\')" aria-label="Volver">' + icon('arrowLeft','ico-sm') + '</button>' +
+    '<div><h1 style="max-width:720px; line-height:1.3">' + esc(e.caratula) + '</h1>' +
+    '<div class="sub">' + esc(e.num) + ' · ' + esc(ar.name) + ' · abierto el ' + fmtDate(e.abierto) + '</div></div></div>' +
+    '<div class="actions"><button class="btn btn-ghost btn-sm" onclick="openCitaForm({date:\'' + iso(TODAY) + '\'})">' + icon('calendar','ico-sm') + 'Agendar cita</button>' +
+    '<button class="btn btn-primary btn-sm" onclick="openActuacion(\'' + e.id + '\')">' + icon('plus','ico-sm') + 'Agregar actuación</button></div></div>';
+
+  h += '<div class="ficha-grid"><div class="grid">';
+  h += '<div class="card card-pad"><div style="display:flex; gap:9px; flex-wrap:wrap; margin-bottom:10px">' + pill(ST_EXP, e.estado) +
+    '<span class="tag">' + esc(e.materia) + '</span><span class="tag">' + esc(e.juzgado) + '</span></div>' +
+    '<p style="font-size:13px; line-height:1.6; color:#33414F">' + esc(e.resumen) + '</p></div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Próximos vencimientos</h3><span class="hint">' + vencs.length + '</span></div>';
+  if(!vencs.length) h += '<div class="empty">Sin vencimientos registrados.</div>';
+  else {
+    h += '<div style="padding:14px 19px">';
+    vencs.forEach(v => {
+      const d = daysUntil(v.date);
+      h += '<div class="venc"><div class="v-d' + (d <= 2 ? ' soon' : '') + '">' + fmtDate(v.date).replace(' ' + v.date.slice(0, 4), '') + '</div>' +
+        '<div class="v-t">' + esc(v.label) + '<div class="mini">' + (d < 0 ? 'vencido hace ' + Math.abs(d) + ' días' : d === 0 ? 'vence hoy' : 'en ' + d + ' día' + (d === 1 ? '' : 's')) + '</div></div></div>';
+    });
+    h += '</div>';
+  }
+  h += '</div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Bitácora de actuaciones</h3><span class="hint">' + e.bitacora.length + ' registros</span>' +
+    '<div class="actions"><button class="btn btn-ghost btn-sm" onclick="openActuacion(\'' + e.id + '\')">' + icon('plus','ico-sm') + 'Agregar</button></div></div>' +
+    '<div class="tl">';
+  if(!e.bitacora.length) h += '<div class="empty">Todavía no hay actuaciones registradas.</div>';
+  e.bitacora.forEach(b => {
+    h += '<div class="tl-item"><div class="tl-d">' + fmtDate(b.date) + '</div>' +
+      '<div class="tl-t">' + esc(b.texto) + '</div><span class="tl-k">' + esc(b.tipo) + '</span></div>';
+  });
+  h += '</div></div></div>';
+
+  // columna lateral
+  h += '<div class="grid">';
+  h += '<div class="card"><div class="card-head"><h3>Cliente</h3></div><div class="card-pad">' +
+    '<div style="display:flex; gap:11px; align-items:center; margin-bottom:12px">' + avatar(cl.name) +
+    '<div style="min-width:0"><div style="font-weight:600; font-size:13.5px">' + esc(cl.name) + '</div><div class="mini">' + esc(cl.kind) + '</div></div></div>' +
+    '<div class="info-list">' +
+      '<div class="il">' + icon('user','ico-sm') + '<div><span class="lbl">Cédula / jurídica</span><span>' + esc(cl.doc) + '</span></div></div>' +
+      '<div class="il">' + icon('phone','ico-sm') + '<div><span class="lbl">Teléfono</span><span>' + esc(cl.phone) + '</span></div></div>' +
+      '<div class="il">' + icon('mail','ico-sm') + '<div><span class="lbl">Correo</span><span style="word-break:break-word">' + esc(cl.email || '—') + '</span></div></div>' +
+      '<div class="il">' + icon('pin','ico-sm') + '<div><span class="lbl">Ubicación</span><span>' + esc(cl.cant + ', ' + cl.prov) + '</span></div></div>' +
+    '</div>' +
+    '<button class="btn btn-ghost btn-sm btn-block" style="margin-top:13px" onclick="openCliente(\'' + cl.id + '\')">Ver ficha del cliente</button></div></div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Datos del caso</h3></div><div class="card-pad"><div class="info-list">' +
+    '<div class="il">' + icon('scale','ico-sm') + '<div><span class="lbl">Abogado a cargo</span><span>' + esc(ab.full) + '</span></div></div>' +
+    '<div class="il">' + icon('briefcase','ico-sm') + '<div><span class="lbl">Cuantía estimada</span><span>' + fmtCRC(e.cuantia) + '</span></div></div>' +
+    '<div class="il">' + icon('file','ico-sm') + '<div><span class="lbl">Última actuación</span><span>' + (e.bitacora[0] ? fmtDate(e.bitacora[0].date) : '—') + '</span></div></div>' +
+    '<div class="il">' + icon('receipt','ico-sm') + '<div><span class="lbl">Facturas del caso</span><span>' + (facs.length ? fmtCRC(facs.reduce((s, f) => s + f.monto, 0)) + ' (' + facs.length + ')' : 'Sin facturas') + '</span></div></div>' +
+  '</div></div></div>';
+
+  if(citas.length){
+    h += '<div class="card"><div class="card-head"><h3>Citas vinculadas</h3></div>';
+    citas.slice(0, 5).forEach(c => {
+      h += '<button class="row" style="padding:10px 16px" onclick="openCitaDetail(\'' + c.id + '\')">' +
+        '<div class="time-box" style="width:48px; flex:0 0 48px"><div class="h" style="font-size:12px">' + c.time + '</div><div class="ampm">' + MSHORT[parseISO(c.date).getMonth()] + ' ' + parseISO(c.date).getDate() + '</div></div>' +
+        '<div class="r-main"><span class="r-t" style="font-size:12.5px">' + esc(tipo(c.tipoId).name) + '</span><span class="r-s">' + esc(lawyer(c.abogadoId).name) + '</span></div>' +
+        pill(ST_CITA, c.estado) + '</button>';
+    });
+    h += '</div>';
+  }
+  h += '</div></div>';
+  return h;
+}
+
+function openActuacion(expId){
+  const e = exp(expId);
+  if(!e) return;
+  const body =
+    '<div class="form-grid">' +
+      '<div><label class="mini" style="font-weight:600">Fecha</label><input class="input" type="date" id="ac-fecha" value="' + iso(TODAY) + '"></div>' +
+      '<div><label class="mini" style="font-weight:600">Tipo</label><select class="select" id="ac-tipo">' +
+        ['Escrito','Resolución','Audiencia','Reunión','Trámite','Notificación'].map(t => '<option>' + t + '</option>').join('') + '</select></div>' +
+      '<div class="full"><label class="mini" style="font-weight:600">Actuación</label>' +
+        '<textarea class="input" id="ac-texto" rows="3" placeholder="Ej.: se presentó escrito de contestación en el Juzgado Civil"></textarea></div>' +
+    '</div><p style="font-size:11px; color:var(--muted); margin-top:8px">Se guarda solo en esta sesión del navegador.</p>';
+  openModal('<div class="modal-h"><div><h3>Agregar actuación</h3><div class="sub">' + esc(e.num) + '</div></div>' +
+    '<button class="modal-x" onclick="closeModal()" aria-label="Cerrar">' + icon('x') + '</button></div>' +
+    '<div class="modal-b">' + body + '</div>' +
+    '<div class="modal-f"><button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>' +
+    '<button class="btn btn-primary" onclick="saveActuacion(\'' + expId + '\')">Guardar actuación</button></div>');
+}
+function saveActuacion(expId){
+  const e = exp(expId);
+  const fecha = document.getElementById('ac-fecha').value;
+  const tipoA = document.getElementById('ac-tipo').value;
+  const texto = document.getElementById('ac-texto').value.trim();
+  if(!texto){ showToast('Escriba la actuación.', true); return; }
+  e.bitacora.unshift({date: fecha || iso(TODAY), tipo: tipoA, texto: texto});
+  closeModal();
+  render();
+  showToast('Actuación agregada a la bitácora.');
+}
+
+/* ============================================================
+   5. CLIENTES
+   ============================================================ */
+function viewClientes(){
+  const q = state.cliQ.toLowerCase().trim();
+  const list = CLIENTS.filter(c => !q || (c.name + ' ' + c.doc + ' ' + c.phone + ' ' + (c.email || '')).toLowerCase().includes(q))
+    .slice().sort((a, b) => a.name.localeCompare(b.name));
+  let h = '<div class="page-head"><div><h1>Clientes</h1><div class="sub">' + CLIENTS.length + ' fichas · ' +
+    CLIENTS.filter(c => c.kind === 'Persona jurídica').length + ' personas jurídicas</div></div>' +
+    '<div class="actions"><button class="btn btn-ghost btn-sm" onclick="go(\'expedientes\')">' + icon('folder','ico-sm') + 'Expedientes</button></div></div>';
+  h += '<div class="card"><div class="card-head">' +
+    '<div class="search-wrap">' + icon('search','ico-sm') + '<input class="input" id="cli-q" placeholder="Buscar por nombre, cédula o teléfono" value="' + esc(state.cliQ) + '" oninput="setCliQ(this.value)"></div>' +
+    '<span class="hint" style="margin-left:auto">' + list.length + ' resultados</span></div>';
+  h += '<div class="table-wrap"><table class="t"><thead><tr><th>Cliente</th><th>Contacto</th><th>Ubicación</th><th>Expedientes</th><th>Cliente desde</th><th></th></tr></thead><tbody>';
+  if(!list.length) h += '<tr><td colspan="6"><div class="empty">Sin resultados.</div></td></tr>';
+  list.slice(0, 60).forEach(c => {
+    const exps = clienteExpedientes(c.id);
+    h += '<tr style="cursor:pointer" onclick="openCliente(\'' + c.id + '\')">' +
+      '<td><div class="t-name">' + avatar(c.name, c.kind === 'Persona jurídica' ? 'nv' : '') + '<span>' + esc(c.name) + '<div class="mini" style="font-weight:400">' + esc(c.kind) + ' · ' + esc(c.doc) + '</div></span></div></td>' +
+      '<td class="mini">' + esc(c.phone) + '<div class="mini" style="font-size:10.5px">' + esc(c.email || '—') + '</div></td>' +
+      '<td class="mini">' + esc(c.cant + ', ' + c.prov) + '</td>' +
+      '<td><span class="tag">' + exps.length + ' exp. · ' + exps.filter(e => e.estado !== 'cerrado').length + ' activos</span></td>' +
+      '<td class="mini">' + fmtDate(c.since) + '</td>' +
+      '<td style="text-align:right; color:var(--muted-2)">' + icon('chevron','ico-sm') + '</td></tr>';
+  });
+  h += '</tbody></table></div></div>';
+  return h;
+}
+function setCliQ(v){
+  state.cliQ = v;
+  render();
+  const el = document.getElementById('cli-q');
+  if(el){ el.focus(); el.setSelectionRange(v.length, v.length); }
+}
+function openCliente(id){ state.sec = 'cliente'; state.cliId = id; render(); window.scrollTo(0, 0); }
+
+function viewCliente(id){
+  const c = cli(id);
+  if(!c) return '<div class="empty">Cliente no encontrado.</div>';
+  const exps = clienteExpedientes(c.id);
+  const citas = clienteCitas(c.id);
+  const prox = citas.filter(x => x.date >= iso(TODAY));
+  const coms = clienteComs(c.id);
+  const facs = FACTURAS.filter(f => f.clienteId === c.id);
+  const facturado = facs.reduce((s, f) => s + f.monto, 0);
+  const pend = facs.filter(f => f.estado === 'pendiente').reduce((s, f) => s + f.monto, 0);
+
+  let h = '<div class="page-head"><div style="display:flex; gap:11px; align-items:center">' +
+    '<button class="btn btn-ghost btn-sm" onclick="go(\'clientes\')" aria-label="Volver">' + icon('arrowLeft','ico-sm') + '</button>' +
+    avatar(c.name, 'lg') +
+    '<div><h1 style="font-size:20px">' + esc(c.name) + '</h1>' +
+      '<div class="sub">' + esc(c.kind) + ' · ' + esc(c.doc) + ' · cliente desde ' + fmtDate(c.since) + '</div></div></div>' +
+    '<div class="actions"><button class="btn btn-primary btn-sm" onclick="openCitaForm()">' + icon('plus','ico-sm') + 'Nueva cita</button></div></div>';
+
+  h += '<div class="grid kpis" style="grid-template-columns:repeat(3,minmax(0,1fr))">' +
+    kpi('folder', 'Expedientes', exps.length, exps.filter(e => e.estado !== 'cerrado').length + (exps.filter(e => e.estado !== 'cerrado').length === 1 ? ' activo' : ' activos'), '') +
+    kpi('calendar', 'Citas', citas.length, (prox[0] ? 'Próxima: ' + fmtDate(prox[0].date) : 'Sin citas próximas'), '') +
+    kpi('receipt', 'Facturado', fmtCRC(facturado), !facs.length ? 'Sin facturas registradas' : pend ? 'Pendiente ' + fmtCRC(pend) : 'Todo cobrado', '') +
+  '</div>';
+
+  h += '<div class="ficha-grid"><div class="grid">';
+  h += '<div class="card"><div class="card-head"><h3>Expedientes del cliente</h3><span class="hint">' + exps.length + '</span></div>';
+  if(!exps.length) h += '<div class="empty">Este cliente todavía no tiene expedientes.</div>';
+  exps.forEach(e => {
+    h += '<button class="row" onclick="openExpediente(\'' + e.id + '\')">' +
+      '<div class="r-main"><span class="r-t">' + esc(e.caratula) + '</span>' +
+      '<span class="r-s">' + esc(e.num) + ' · ' + esc(areaOf(e.area).name) + ' · ' + esc(lawyer(e.abogadoId).name) + '</span></div>' +
+      '<div class="r-end">' + pill(ST_EXP, e.estado) + icon('chevron','ico-sm') + '</div></button>';
+  });
+  h += '</div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Citas</h3><span class="hint">' + (prox.length ? prox.length + ' próximas' : 'histórico') + '</span></div>';
+  if(!citas.length) h += '<div class="empty">Sin citas registradas.</div>';
+  citas.slice(-6).reverse().forEach(x => {
+    h += '<button class="row" onclick="openCitaDetail(\'' + x.id + '\')">' +
+      '<div class="time-box"><div class="h" style="font-size:12px">' + x.time + '</div><div class="ampm">' + MSHORT[parseISO(x.date).getMonth()] + ' ' + parseISO(x.date).getDate() + '</div></div>' +
+      '<div class="r-main"><span class="r-t">' + esc(tipo(x.tipoId).name) + '</span><span class="r-s">' + esc(lawyer(x.abogadoId).name) + ' · ' + x.dur + ' min</span></div>' +
+      '<div class="r-end">' + pill(ST_CITA, x.estado) + '</div></button>';
+  });
+  h += '</div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Historial de comunicaciones</h3><span class="hint">' + coms.length + '</span></div><div class="tl">';
+  if(!coms.length) h += '<div class="empty">Sin comunicaciones registradas.</div>';
+  coms.forEach(m => {
+    h += '<div class="tl-item"><div class="tl-d">' + fmtDate(m.fecha) + ' · ' + esc(m.canal) + '</div><div class="tl-t">' + esc(m.texto) + '</div></div>';
+  });
+  h += '</div></div></div>';
+
+  h += '<div class="grid">';
+  h += '<div class="card"><div class="card-head"><h3>Contacto</h3></div><div class="card-pad"><div class="info-list">' +
+    '<div class="il">' + icon('phone','ico-sm') + '<div><span class="lbl">Teléfono</span><span>' + esc(c.phone) + '</span></div></div>' +
+    '<div class="il">' + icon('mail','ico-sm') + '<div><span class="lbl">Correo</span><span style="word-break:break-word">' + esc(c.email || '—') + '</span></div></div>' +
+    '<div class="il">' + icon('pin','ico-sm') + '<div><span class="lbl">Ubicación</span><span>' + esc(c.cant + ', ' + c.prov) + '</span></div></div>' +
+    (c.contact ? '<div class="il">' + icon('user','ico-sm') + '<div><span class="lbl">Persona de contacto</span><span>' + esc(c.contact) + '</span></div></div>' : '') +
+    '<div class="il">' + icon('chat','ico-sm') + '<div><span class="lbl">Cómo llegó</span><span>' + esc(c.ref) + '</span></div></div>' +
+  '</div></div></div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Facturación</h3></div><div class="card-pad">' +
+    '<div style="font-size:24px; font-weight:700; letter-spacing:-.03em">' + fmtCRC(facturado) + '</div>' +
+    '<div class="mini" style="margin-bottom:12px">' + facs.length + ' facturas · ' + (pend ? fmtCRC(pend) + ' pendiente' : 'sin saldo pendiente') + '</div>';
+  facs.slice(-4).reverse().forEach(f => {
+    h += '<div style="display:flex; justify-content:space-between; gap:8px; padding:7px 0; border-top:1px dashed var(--line); font-size:12px">' +
+      '<div style="min-width:0"><div style="font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">' + esc(f.concepto) + '</div>' +
+      '<div class="mini">' + fmtDate(f.fecha) + '</div></div>' +
+      '<div style="text-align:right"><div style="font-weight:700">' + fmtCRC(f.monto) + '</div>' + pill(ST_FAC, f.estado) + '</div></div>';
+  });
+  h += '<button class="btn btn-ghost btn-sm btn-block" style="margin-top:11px" onclick="go(\'facturacion\')">Ver facturación</button></div></div>';
+  h += '</div></div>';
+  return h;
+}
+
+/* ============================================================
+   6. FACTURACIÓN
+   ============================================================ */
+function viewFacturacion(){
+  const meses = [0, 1, 2].map(i => {
+    const d = new Date(TODAY.getFullYear(), TODAY.getMonth() - i, 1);
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1);
+  });
+  const mes = state.factMes;
+  const todas = facturasDeMes(mes).slice().sort((a, b) => b.fecha.localeCompare(a.fecha));
+  const list = todas.filter(f => state.factEstado === 'todos' || f.estado === state.factEstado);
+  const total = totalMes(mes), pagado = pagadoMes(mes), pend = pendienteMes(mes);
+  const pct = total ? Math.round(pagado / total * 100) : 0;
+
+  let h = '<div class="page-head"><div><h1>Facturación</h1><div class="sub">Honorarios por mes, cliente y concepto · montos en colones costarricenses (₡)</div></div>' +
+    '<div class="actions"><button class="btn btn-ghost btn-sm" onclick="go(\'informes\')">' + icon('chart','ico-sm') + 'Ver informes</button></div></div>';
+
+  h += '<div class="agenda-bar"><div class="seg">' + meses.map(m =>
+    '<button class="' + (m === mes ? 'on' : '') + '" onclick="setFactMes(\'' + m + '\')" style="text-transform:capitalize">' + mesLabel(m) + '</button>').join('') + '</div>' +
+    '<div class="seg" style="margin-left:auto">' + [['todos','Todas'],['pagado','Pagadas'],['pendiente','Pendientes']].map(x =>
+      '<button class="' + (state.factEstado === x[0] ? 'on' : '') + '" onclick="setFactEstado(\'' + x[0] + '\')" style="font-size:11.5px; padding:5px 10px">' + x[1] + '</button>').join('') + '</div></div>';
+
+  h += '<div class="card card-pad" style="margin-bottom:15px"><div class="fact-total">' +
+    '<div class="ft"><div class="l">Total del mes</div><div class="v">' + fmtCRC(total) + '</div><div class="s">' + todas.length + ' facturas</div></div>' +
+    '<div class="ft"><div class="l">Cobrado</div><div class="v" style="color:var(--green)">' + fmtCRC(pagado) + '</div><div class="s">' + pct + '% del total</div></div>' +
+    '<div class="ft"><div class="l">Pendiente</div><div class="v" style="color:var(--amber)">' + fmtCRC(pend) + '</div><div class="s">' + todas.filter(f => f.estado === 'pendiente').length + ' facturas por cobrar</div></div>' +
+    '<div class="bar-mini"><div class="bm-track"><i style="width:' + pct + '%; background:linear-gradient(90deg,#8FBF9F,#2C7A5B)"></i>' +
+      '<i style="width:' + (100 - pct) + '%; background:linear-gradient(90deg,#E2C68B,#B08A3E)"></i></div>' +
+      '<div class="bm-leg"><span><i class="dot" style="background:#2C7A5B"></i> Cobrado</span><span><i class="dot" style="background:#B08A3E"></i> Pendiente</span></div></div>' +
+  '</div></div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Honorarios de ' + mesLabel(mes) + '</h3><span class="hint">' + list.length + ' registros</span></div>' +
+    '<div class="table-wrap"><table class="t"><thead><tr><th>Factura</th><th>Cliente</th><th>Concepto</th><th>Abogado</th><th class="num">Monto</th><th>Estado</th><th></th></tr></thead><tbody>';
+  if(!list.length) h += '<tr><td colspan="7"><div class="empty">No hay facturas con ese filtro.</div></td></tr>';
+  list.forEach(f => {
+    const c = cli(f.clienteId);
+    h += '<tr><td class="mini">' + esc(f.num) + '<div class="mini" style="font-size:10.5px">' + fmtDate(f.fecha) + '</div></td>' +
+      '<td><div style="font-weight:600; max-width:210px; overflow:hidden; text-overflow:ellipsis">' + esc(c ? c.name : '—') + '</div>' +
+        '<div class="mini">' + esc(f.medio) + '</div></td>' +
+      '<td class="mini" style="white-space:normal; max-width:250px">' + esc(f.concepto) + '</td>' +
+      '<td class="mini">' + esc(lawyer(f.abogadoId).name) + '</td>' +
+      '<td class="num">' + fmtCRC(f.monto) + '</td>' +
+      '<td>' + pill(ST_FAC, f.estado) + '</td>' +
+      '<td style="text-align:right">' + (f.estado === 'pendiente'
+        ? '<button class="btn btn-ghost btn-sm" style="padding:4px 9px; font-size:11px" onclick="marcarPagada(\'' + f.id + '\')">Cobrar</button>'
+        : '<span class="mini">' + icon('check','ico-sm') + '</span>') + '</td></tr>';
+  });
+  h += '</tbody></table></div></div>';
+  return h;
+}
+function setFactMes(m){ state.factMes = m; render(); }
+function setFactEstado(e){ state.factEstado = e; render(); }
+function marcarPagada(id){
+  const f = FACTURAS.find(x => x.id === id);
+  if(!f) return;
+  f.estado = 'pagado';
+  render();
+  showToast('Factura ' + f.num + ' marcada como pagada.');
+}
+
+/* ============================================================
+   7. INFORMES
+   ============================================================ */
+function viewInformes(){
+  const maxC = Math.max(...CONSULTAS_MES.map(x => x.n));
+  const areas = AREAS.map(a => ({a:a, n: EXPEDIENTS.filter(e => e.area === a.id).length}));
+  const maxA = Math.max(...areas.map(x => x.n));
+  const abHoras = agendaMinutosPorAbogado();
+  const maxH = Math.max(1, ...abHoras.map(x => x.h));
+  const mes = mesActual();
+  const pagado = pagadoMes(mes), pend = pendienteMes(mes), total = pagado + pend;
+  const maxF = Math.max(...FACTURACION_MES.map(x => x.n));
+
+  let h = '<div class="page-head"><div><h1>Informes</h1><div class="sub">Cómo se mueve el bufete · datos de ejemplo del período</div></div>' +
+    '<div class="actions"><span class="tag">' + mesLabel(mes) + '</span></div></div>';
+
+  h += '<div class="dcols-3" style="margin-top:0">';
+
+  // consultas por mes
+  h += '<div class="card"><div class="card-head"><h3>Consultas recibidas por mes</h3><span class="hint">últimos 6 meses</span></div><div class="card-pad">' +
+    '<div class="chart-bars">' + CONSULTAS_MES.map(x =>
+      '<div class="bar-wrap"><div class="bar" style="height:' + Math.round(x.n / maxC * 100) + '%"><span class="bv">' + x.n + '</span></div>' +
+      '<div class="bl">' + x.label + '</div></div>').join('') + '</div></div></div>';
+
+  // áreas
+  h += '<div class="card"><div class="card-head"><h3>Áreas más frecuentes</h3><span class="hint">por expedientes</span></div><div class="card-pad">';
+  areas.slice().sort((a, b) => b.n - a.n).forEach(x => {
+    h += '<div class="hbar"><div class="hbar-top"><span class="n">' + esc(x.a.name) + '</span><span class="v">' + x.n + ' expedientes · ' + Math.round(x.n / EXPEDIENTS.length * 100) + '%</span></div>' +
+      '<div class="hbar-track"><div class="hbar-fill" style="width:' + Math.round(x.n / maxA * 100) + '%; background:' + x.a.color + '"></div></div></div>';
+  });
+  h += '</div></div>';
+
+  // horas de agenda
+  h += '<div class="card"><div class="card-head"><h3>Horas de agenda por abogado</h3><span class="hint">' + mesLabel(mes) + '</span></div><div class="card-pad">';
+  abHoras.slice().sort((a, b) => b.h - a.h).forEach(x => {
+    h += '<div class="hbar"><div class="hbar-top"><span class="n">' + esc(x.l.name) + '</span><span class="v">' + x.h.toFixed(1) + ' h</span></div>' +
+      '<div class="hbar-track"><div class="hbar-fill" style="width:' + Math.round(x.h / maxH * 100) + '%; background:linear-gradient(90deg,#D6B978,' + x.l.color + ')"></div></div></div>';
+  });
+  h += '<div class="mini" style="margin-top:6px">Total del bufete: ' + abHoras.reduce((s, x) => s + x.h, 0).toFixed(1) + ' horas agendadas en el mes.</div>';
+  h += '</div></div>';
+
+  // cobrado vs pendiente
+  const pct = total ? pagado / total : 0;
+  const r = 56, circ = 2 * Math.PI * r;
+  h += '<div class="card"><div class="card-head"><h3>Cobrado vs. pendiente</h3><span class="hint">' + mesLabel(mes) + '</span></div><div class="card-pad">' +
+    '<div class="donut-wrap"><svg class="donut" viewBox="0 0 140 140" role="img" aria-label="Cobrado ' + Math.round(pct * 100) + '%">' +
+      '<circle cx="70" cy="70" r="' + r + '" stroke="#EDF1F5"/>' +
+      '<circle cx="70" cy="70" r="' + r + '" stroke="#2C7A5B" stroke-dasharray="' + (circ * pct) + ' ' + circ + '" transform="rotate(-90 70 70)" stroke-linecap="round"/>' +
+      '<text x="70" y="66" text-anchor="middle" font-size="21" font-weight="700" fill="#16202E" font-family="Instrument Sans, sans-serif">' + Math.round(pct * 100) + '%</text>' +
+      '<text x="70" y="84" text-anchor="middle" font-size="9.5" fill="#64748B" font-family="Instrument Sans, sans-serif">cobrado</text></svg>' +
+    '<div class="donut-legend">' +
+      '<div><span class="l"><i class="legend-dot" style="background:#2C7A5B"></i>Cobrado</span><span class="n">' + fmtCRC(pagado) + '</span></div>' +
+      '<div><span class="l"><i class="legend-dot" style="background:#D6B978"></i>Pendiente</span><span class="n">' + fmtCRC(pend) + '</span></div>' +
+      '<div><span class="l">Total del mes</span><span class="n">' + fmtCRC(total) + '</span></div>' +
+    '</div></div></div></div>';
+  h += '</div>';
+
+  // facturación por mes
+  h += '<div class="card" style="margin-top:15px"><div class="card-head"><h3>Facturación de los últimos seis meses</h3><span class="hint">colones costarricenses</span></div><div class="card-pad">' +
+    '<div class="chart-bars" style="height:160px">' + FACTURACION_MES.map(x =>
+      '<div class="bar-wrap"><div class="bar" style="height:' + Math.round(x.n / maxF * 100) + '%; background:linear-gradient(180deg,#8FB6D8,#1B3A5C)"><span class="bv" style="color:#1B3A5C">' + (x.n / 1000000).toFixed(1) + 'M</span></div>' +
+      '<div class="bl">' + x.label + '</div></div>').join('') + '</div>' +
+    '<div class="mini" style="margin-top:8px; border-top:1px solid var(--line-2); padding-top:9px">Promedio mensual: ' + fmtCRC(FACTURACION_MES.reduce((s, x) => s + x.n, 0) / 6) + '.</div>' +
+  '</div></div>';
+  return h;
+}
+
+/* ============================================================
+   8. AJUSTES
+   ============================================================ */
+function viewAjustes(){
+  let h = '<div class="page-head"><div><h1>Ajustes</h1><div class="sub">Catálogo de citas, abogados, horarios y recordatorios</div></div></div>';
+  h += '<div class="set-grid"><div class="grid">';
+
+  h += '<div class="card"><div class="card-head"><h3>Tipos de consulta y duración</h3><span class="hint">la agenda usa estos minutos</span></div>';
+  TIPOS.forEach(t => {
+    h += '<div class="set-row"><div class="s-main"><div class="s-t">' + esc(t.name) + '</div>' +
+      '<div class="s-s">' + esc(areaOf(t.area).name) + '</div></div>' +
+      '<div class="s-ctl"><input class="inline-num" type="number" min="15" step="15" value="' + t.dur + '" onchange="setTipoDur(\'' + t.id + '\', this.value)">' +
+      '<span class="mini">min</span></div></div>';
+  });
+  h += '<div class="empty" style="text-align:left; padding:12px 18px; font-size:11.5px">Los cambios se aplican a las citas nuevas de esta demostración.</div></div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Abogados del bufete</h3><span class="hint">' + LAWYERS.length + '</span></div>';
+  LAWYERS.forEach(l => {
+    h += '<div class="set-row"><span style="width:9px; height:36px; border-radius:4px; background:' + l.color + '; flex:0 0 9px"></span>' +
+      '<div class="s-main"><div class="s-t">' + esc(l.full) + '</div><div class="s-s">' + esc(l.role) + ' · ' + l.areas.map(a => areaOf(a).name).join(', ') + '</div></div>' +
+      '<div class="s-ctl"><span class="tag">' + CITAS.filter(c => c.abogadoId === l.id).length + ' citas</span></div></div>';
+  });
+  h += '</div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Horarios de atención</h3><span class="hint">hora local de Costa Rica</span></div>';
+  SETTINGS.horarios.forEach((x, i) => {
+    h += '<div class="hours-row"><span class="d">' + x.d + '</span>' +
+      '<button class="switch ' + (x.on ? 'on' : '') + '" onclick="toggleDia(' + i + ')" aria-label="Abrir ' + x.d + '"></button>' +
+      '<span class="t"><input type="time" value="' + x.a + '" onchange="setHora(' + i + ',\'a\',this.value)"> a ' +
+      '<input type="time" value="' + x.b + '" onchange="setHora(' + i + ',\'b\',this.value)"></span>' +
+      (x.on ? '<span class="pill pill-green" style="margin-left:auto">Abierto</span>' : '<span class="pill pill-gray" style="margin-left:auto">Cerrado</span>') +
+    '</div>';
+  });
+  h += '</div></div>';
+
+  h += '<div class="grid">';
+  h += '<div class="card"><div class="card-head"><h3>Recordatorios</h3></div>';
+  [['recordatorio24','Aviso 24 horas antes','Se envía al cliente el día anterior.'],
+   ['recordatorio2','Aviso 2 horas antes','Solo para citas confirmadas.'],
+   ['recordatorioWhatsApp','Recordatorio por WhatsApp','Usa el número del cliente en la ficha.'],
+   ['confirmacionAuto','Confirmar cita al responder','Marca la cita como confirmada.']].forEach(x => {
+    h += '<div class="set-row"><div class="s-main"><div class="s-t">' + x[1] + '</div><div class="s-s">' + x[2] + '</div></div>' +
+      '<button class="switch ' + (SETTINGS[x[0]] ? 'on' : '') + '" onclick="toggleSetting(\'' + x[0] + '\')" aria-label="' + x[1] + '"></button></div>';
+  });
+  h += '<div class="preview-wrap"><div class="preview-lbl">Vista previa del recordatorio</div>' +
+    '<div class="preview-msg">Estimado(a) cliente, le recordamos su cita en el Bufete Baltodano Valverde el [fecha] a las [hora]. Si necesita reprogramar, escriba al +506 8631 0255.</div>' +
+    '<p style="font-size:10.5px; color:var(--muted); margin-top:7px">Demostración: ningún mensaje se envía.</p></div></div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Datos del bufete</h3></div><div class="card-pad"><div class="info-list">' +
+    '<div class="il">' + icon('scale','ico-sm') + '<div><span class="lbl">Despacho</span><span>' + esc(SETTINGS.bufete) + '</span></div></div>' +
+    '<div class="il">' + icon('pin','ico-sm') + '<div><span class="lbl">Dirección</span><span>' + esc(SETTINGS.direccion) + '</span></div></div>' +
+    '<div class="il">' + icon('phone','ico-sm') + '<div><span class="lbl">WhatsApp</span><span>' + esc(SETTINGS.whatsapp) + '</span></div></div>' +
+    '<div class="il">' + icon('mail','ico-sm') + '<div><span class="lbl">Correo</span><span style="word-break:break-word">' + esc(SETTINGS.correo) + '</span></div></div>' +
+    '<div class="il">' + icon('external','ico-sm') + '<div><span class="lbl">Web pública</span><a class="link-btn" href="' + PUBLIC_URL + '" target="_blank" rel="noopener" style="word-break:break-all; font-size:11.5px">' + PUBLIC_URL.replace('https://', '') + '</a></div></div>' +
+  '</div></div></div>';
+  h += '</div></div>';
+  return h;
+}
+function setTipoDur(id, v){
+  const t = TIPOS.find(x => x.id === id);
+  if(!t) return;
+  t.dur = Math.max(15, Math.round(Number(v) || t.dur));
+  render();
+  showToast('Duración de «' + t.name + '»: ' + t.dur + ' minutos.');
+}
+function toggleSetting(k){ SETTINGS[k] = !SETTINGS[k]; render(); }
+function toggleDia(i){ SETTINGS.horarios[i].on = !SETTINGS.horarios[i].on; render(); }
+function setHora(i, k, v){ SETTINGS.horarios[i][k] = v; }
+
+/* ============================================================
+   Modal y avisos
+   ============================================================ */
+function openModal(inner){
+  document.getElementById('modalRoot').innerHTML =
+    '<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal" role="dialog" aria-modal="true">' + inner + '</div></div>';
+}
+function closeModal(){ document.getElementById('modalRoot').innerHTML = ''; }
+let _toastT = null;
+function showToast(msg, err){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (err ? ' err' : '');
+  clearTimeout(_toastT);
+  _toastT = setTimeout(() => { el.className = 'toast'; }, 3200);
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeModal(); document.getElementById('menuRoot').innerHTML = ''; } });
+</script>
+</body>
+</html>
