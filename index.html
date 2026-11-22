@@ -1532,35 +1532,50 @@ function agendaStep(n){
 function agendaToday(){ state.agenda.date = iso(TODAY); render(); }
 
 function dayGantt(dateISO, abogados){
+  const citas = citasDe(dateISO).filter(c => abogados.some(l => l.id === c.abogadoId));
+  // ventana horaria ajustada a las citas del día (mínimo 6 horas)
+  let dStart = 8 * 60, dEnd = 18 * 60;
+  if(citas.length){
+    const ini = Math.min(...citas.map(c => minutes(c.time)));
+    const fin = Math.max(...citas.map(c => minutes(c.time) + c.dur));
+    dStart = Math.max(0, Math.floor((ini - 30) / 60) * 60);
+    dEnd = Math.min(24 * 60, Math.ceil((fin + 30) / 60) * 60);
+    if(dEnd - dStart < 360){
+      const mid = (dStart + dEnd) / 2;
+      dStart = Math.max(0, Math.round((mid - 180) / 60) * 60);
+      dEnd = dStart + 360;
+    }
+  }
+  const span = dEnd - dStart;
   let h = '<div class="gantt-scroll"><div class="gantt"><div class="gantt-head"><div class="gantt-lbl-w"></div><div class="gantt-scale">';
-  for(let hr = DAY_START; hr <= DAY_END; hr++){
-    const left = ((hr - DAY_START) * 60 / SPAN) * 100;
+  for(let hr = dStart / 60; hr < dEnd / 60; hr++){
+    const left = ((hr * 60 - dStart) / span) * 100;
+    if(left > 95) continue;
     h += '<span class="hs" style="left:' + left + '%">' + (hr > 12 ? hr - 12 : hr) + (hr >= 12 ? ' p.m.' : ' a.m.') + '</span>';
   }
   h += '</div></div>';
   abogados.forEach(l => {
-    const citas = citasDe(dateISO).filter(c => c.abogadoId === l.id);
+    const propias = citas.filter(c => c.abogadoId === l.id);
     h += '<div class="gantt-lane"><div class="lane-lbl">' + esc(l.name) + '<span class="role">' + esc(l.role) + '</span></div>' +
       '<div class="lane-track"><div class="lane-grid">';
-    for(let hr = DAY_START + 1; hr < DAY_END; hr++){
-      h += '<span class="gl" style="left:' + (((hr - DAY_START) * 60 / SPAN) * 100) + '%"></span>';
+    for(let hr = dStart / 60 + 1; hr < dEnd / 60; hr++){
+      h += '<span class="gl" style="left:' + (((hr * 60 - dStart) / span) * 100) + '%"></span>';
     }
     if(dateISO === iso(TODAY)){
       const nm = new Date().getHours() * 60 + new Date().getMinutes();
-      if(nm > DAY_START * 60 && nm < DAY_END * 60){
-        h += '<span style="position:absolute; top:0; bottom:0; width:2px; background:#A63A44; z-index:3; pointer-events:none; left:' + ((nm - DAY_START * 60) / SPAN * 100) + '%"></span>';
+      if(nm > dStart && nm < dEnd){
+        h += '<span style="position:absolute; top:0; bottom:0; width:2px; background:#A63A44; z-index:3; pointer-events:none; left:' + ((nm - dStart) / span * 100) + '%"></span>';
       }
     }
     h += '</div>';
-    if(!citas.length) h += '<div class="gantt-empty">Sin citas este día</div>';
-    citas.forEach(c => {
-      const start = minutes(c.time) - DAY_START * 60;
-      const left = Math.max(0, start / SPAN * 100);
-      const width = Math.min(100 - left, c.dur / SPAN * 100);
+    if(!propias.length) h += '<div class="gantt-empty">Sin citas este día</div>';
+    propias.forEach(c => {
+      const left = Math.max(0, (minutes(c.time) - dStart) / span * 100);
+      const width = Math.min(100 - left, c.dur / span * 100);
       const cl = cli(c.clienteId), tp = tipo(c.tipoId);
       const tiny = c.dur < 45;
       h += '<button class="gbar st-' + c.estado + (tiny ? ' tiny' : '') + '" style="left:calc(' + left + '% + 2px); width:calc(' + width + '% - 4px)" ' +
-        'onclick="openCitaDetail(\'' + c.id + '\')" title="' + esc(tp.name + ' · ' + cl.name + ' · ' + c.time) + '">' +
+        'onclick="openCitaDetail(\'' + c.id + '\')" title="' + esc(tp.name + ' · ' + cl.name + ' · ' + c.time + ' · ' + c.dur + ' min') + '">' +
         '<span class="gt">' + c.time + '</span>' +
         '<span class="gn">' + esc(blockName(cl)) + '</span></button>';
     });
