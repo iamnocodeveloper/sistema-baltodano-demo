@@ -1382,10 +1382,13 @@ function viewEscritorio(){
   const semana = vencimientosSemana();
   const mes = mesActual();
   const total = totalMes(mes), pagado = pagadoMes(mes), pendiente = pendienteMes(mes);
-  const prox = hoy.filter(c => c.estado !== 'atendida' && c.estado !== 'cancelada')[0];
+  const ahora = new Date().getHours() * 60 + new Date().getMinutes();
+  const pendientesHoy = hoy.filter(c => c.estado === 'confirmada' || c.estado === 'pendiente');
+  const prox = pendientesHoy.find(c => minutes(c.time) >= ahora) || pendientesHoy[0];
   const expAbiertos = EXPEDIENTS.filter(e => e.estado !== 'cerrado').length;
 
-  let h = '<div class="page-head"><div><h1>Buenos días, licenciado</h1>' +
+  const saludo = new Date().getHours() < 12 ? 'Buenos días' : new Date().getHours() < 19 ? 'Buenas tardes' : 'Buenas noches';
+  let h = '<div class="page-head"><div><h1>' + saludo + ', licenciado</h1>' +
     '<div class="sub">' + fmtLong(TODAY) + ' · ' + expAbiertos + ' expedientes activos en el bufete</div></div>' +
     '<div class="actions"><button class="btn btn-ghost btn-sm" onclick="go(\'informes\')">' + icon('chart','ico-sm') + 'Ver informes</button>' +
     '<button class="btn btn-primary btn-sm" onclick="openCitaForm()">' + icon('plus','ico-sm') + 'Nueva cita</button></div></div>';
