@@ -952,11 +952,8 @@ const EXPEDIENTS = [];
     const nb = intBetween(4, 7);
     let bd = addDays(abierto, 4);
     for(let j = 0; j < nb; j++){
-      bit.push({
-        date: iso(bd),
-        tipo: pick(['Escrito','Resolución','Audiencia','Reunión','Trámite','Notificación']),
-        texto: pick(BITACORA[area])
-      });
+      const textoBit = pick(BITACORA[area]);
+      bit.push({date: iso(bd), tipo: tipoDeBitacora(textoBit), texto: textoBit});
       bd = addDays(bd, intBetween(9, 55));
       if(bd > TODAY) bd = addDays(TODAY, -intBetween(2, 20));
     }
@@ -980,6 +977,14 @@ const EXPEDIENTS = [];
     });
   }
 })();
+function tipoDeBitacora(t){
+  if(/^Se presentó/.test(t)) return 'Escrito';
+  if(/Audiencia/.test(t)) return 'Audiencia';
+  if(/Notificación|notificó/i.test(t)) return 'Notificación';
+  if(/Firma|Inscripción|protocolo|Certificación/i.test(t)) return 'Trámite';
+  if(/Reunión|Entrevista|Revisión|Se revisó/i.test(t)) return 'Reunión';
+  return 'Trámite';
+}
 function apellidosDe(c){
   const p = c.name.split(' ');
   if(c.kind === 'Persona jurídica') return shortName(c.name).replace(/ S\.A\.| S\.R\.L\./g, '');
@@ -1518,9 +1523,10 @@ function viewAgenda(){
   }
   return h;
 }
+const ABREV = {'Constructora':'Constr.','Distribuidora':'Distrib.','Transportes':'Transp.','Inversiones':'Invers.','Panadería':'Panad.','Talleres':'Talleres','Farmacia':'Farmacia','Hotel':'Hotel'};
 function blockName(c){
-  if(c.kind === 'Persona jurídica') return c.name.split(' ')[0];
-  return c.name.split(' ')[0];
+  const first = c.name.split(' ')[0];
+  return ABREV[first] || first;
 }
 function stColor(k){ return {confirmada:'#B08A3E', pendiente:'#D2A442', atendida:'#79A48F', cancelada:'#C08A90'}[k]; }
 function setAgendaMode(m){ state.agenda.mode = m; render(); }
