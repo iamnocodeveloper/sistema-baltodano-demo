@@ -746,6 +746,7 @@ function to24(t){ return t; }
 function minutes(t){ const p = t.split(':').map(Number); return p[0] * 60 + p[1]; }
 function hhmm(T){ return pad(Math.floor(T / 60)) + ':' + pad(T % 60); }
 function fmtCRC(n){ return '₡' + Math.round(n).toLocaleString('es-CR'); }
+function fmtM(n){ return '₡' + (n / 1000000).toFixed(2).replace('.', ',') + ' M'; }
 function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function initials(name){ return name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase(); }
 function shortName(name){ return name.split(' ').filter(Boolean).slice(0, 2).join(' '); }
@@ -1382,7 +1383,7 @@ function viewEscritorio(){
     kpi('calendar', 'Citas de hoy', hoy.length, hoy.filter(c => c.estado === 'confirmada').length + ' confirmadas · ' + (prox ? 'próxima ' + to12(prox.time) : 'sin pendientes'), '') +
     kpi('chat', 'Consultas sin asignar', nuevas.length, nuevas.length ? 'La más reciente: ' + shortName(nuevas[0].nombre) : 'Bandeja al día', '') +
     kpi('alert', 'Plazos esta semana', semana.length, semana.length ? 'El más próximo: ' + (semana[0].d === 0 ? 'hoy' : 'en ' + semana[0].d + ' día' + (semana[0].d === 1 ? '' : 's')) : 'Sin vencimientos', '') +
-    kpi('receipt', 'Facturación del mes', fmtCRC(total), 'Cobrado ' + fmtCRC(pagado) + ' · pendiente ' + fmtCRC(pendiente), 'accent') +
+    kpi('receipt', 'Facturación del mes', fmtCRC(total), 'Cobrado ' + fmtM(pagado) + ' · pendiente ' + fmtM(pendiente), 'accent') +
   '</div>';
 
   // agenda del día + consultas nuevas
