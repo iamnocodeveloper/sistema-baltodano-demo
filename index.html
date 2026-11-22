@@ -1777,7 +1777,7 @@ function saveCita(consultaId){
   state.agenda.date = fecha;
   if(state.sec !== 'agenda') state.sec = 'agenda';
   render();
-  showToast('Cita agendada para ' + fmtDate(fecha) + ' a las ' + to12(hora) + (nuevo ? ' · cliente creado' : '') + '.');
+  showToast('Cita agendada para ' + fmtDate(fecha) + ' a las ' + to12(hora) + (nuevo ? ' · cliente creado' : ''));
 }
 
 /* ============================================================
